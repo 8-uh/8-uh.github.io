@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on love-notes</title>
-    <link>http://8-uh.github.io/post/</link>
+    <link>https://8-uh.github.io/post/</link>
     <description>Recent content in Posts on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 25 Apr 2017 23:48:11 -0500</lastBuildDate>
     
-	<atom:link href="http://8-uh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://8-uh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>hello, world!</title>
-      <link>http://8-uh.github.io/post/hello-world/</link>
+      <link>https://8-uh.github.io/post/hello-world/</link>
       <pubDate>Tue, 25 Apr 2017 23:48:11 -0500</pubDate>
       
-      <guid>http://8-uh.github.io/post/hello-world/</guid>
+      <guid>https://8-uh.github.io/post/hello-world/</guid>
       <description>I&amp;rsquo;m back!
 And just trying to get my code highlighting done properly&amp;hellip;
 import remark from &#39;remark&#39; import html from &#39;remark-html&#39; import visit from &#39;unist-util-visit&#39; import u from &#39;unist-builder&#39; import jetpack from &#39;fs-jetpack&#39; import debug from &#39;debug&#39; import fmt from &#39;fmt-obj&#39; import {truncValues, none} from &#39;./utils&#39; import reporter from &#39;vfile-reporter&#39; import CodeStore from &#39;./CodeStore&#39; import LoveNotes from &#39;./LoveNotes&#39; const fs = jetpack const log = debug(&#39;love-notes:log&#39;) const err = debug(&#39;love-notes:err&#39;) function process(fptr) { log(&#39;fptr:&#39;, fptr) const contents = fs.</description>
