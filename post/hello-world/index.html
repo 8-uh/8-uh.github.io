@@ -1,0 +1,553 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="love-notes">
+		<meta name="description" content="code doodles and diatribes">
+		<meta name="generator" content="Hugo 0.20.2" />
+		<title>hello, world! &middot; love-notes</title>
+		<link rel="shortcut icon" href="http://8-uh.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="http://8-uh.github.io/css/style.css">
+
+		<link rel="stylesheet" href="http://8-uh.github.io/css/prism.css">
+		
+
+		
+		<link rel="stylesheet" href="http://8-uh.github.io/css/font-awesome.min.css">
+		
+
+		
+		<link href="http://8-uh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="love-notes" />
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+	<a href='http://8-uh.github.io/'>~/</a>
+	
+	<a href='http://8-uh.github.io/post'>~/posts</a>
+	<a href='http://8-uh.github.io/tags'>~/tags</a>
+	<a href='http://8-uh.github.io/about'>~/about</a>
+
+	
+
+	
+	<a href="http://8-uh.github.io/index.xml">./rss.sh</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        hello, world!
+                    </h1>
+                    <h2 class="headline">
+                    Apr 25, 2017 23:48
+                    · 890 words
+                    · 5 minutes read
+                      <span class="tags">
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    <p>I&rsquo;m back!</p>
+
+<p>And just trying to get my code highlighting done properly&hellip;</p>
+
+<pre><code class="language-javascript">
+import remark from 'remark'
+import html from 'remark-html'
+import visit from 'unist-util-visit'
+import u from 'unist-builder'
+import jetpack from 'fs-jetpack'
+import debug from 'debug'
+import fmt from 'fmt-obj'
+import {truncValues, none} from './utils'
+import reporter from 'vfile-reporter'
+import CodeStore from './CodeStore'
+import LoveNotes from './LoveNotes'
+
+
+const fs = jetpack
+
+const log = debug('love-notes:log')
+const err = debug('love-notes:err')
+
+
+function process(fptr) {
+  log('fptr:', fptr)
+
+  const contents = fs.read(fptr)
+  const store = new CodeStore()
+  const ast = remark().parse(contents)
+
+  visit(ast, 'code', node =&gt; {
+    node.data = node.data || {}
+    if(none(node.data.process) || !!node.data.process) {
+      // that's some bad ~hat~ side-effect, harry :\
+      node = store.addNode(node)
+    }
+  })
+  log('virtual files created:', store.codefiles.length)
+  return store
+}
+
+function create(files, outdir) {
+  log('files:\n%O', files)
+  const pen = fs.cwd(outdir)
+  files.forEach(file =&gt; {
+    pen.write(file.name, file.source)
+  })
+  log('files created:\n%O', pen.list().map(f =&gt; `${pen.cwd()}/${f}`))
+}
+
+function tangle(fptr, outdir = './docs') {
+  log('outdir:', outdir)
+  const store = process(fptr)
+
+  const filenames = store.filenames
+  log('filenames: %O', filenames)
+  const files = filenames.map(file =&gt; {
+    return {source: store.generateSource(file), name: file}
+  })
+  create(files, outdir)
+  return files
+}
+
+function weave(fptr, outdir = `./docs`, optr) {
+
+  const contents = fs.read(fptr)
+  const filename = optr || /\/?(\S+)\.\S+$/.exec(fptr)[1] + '.html'
+  remark().use(weaver).use(html).process(contents, function (err, file) {
+    const pen = fs.cwd(outdir)
+    pen.write(filename, file.contents)
+    log(`created file ${pen.cwd()}/${filename}`)
+  });
+}
+
+function weaver() {
+
+  function transformer(ast, file) {
+    var insertions = []
+
+    visit(ast,'code', (node, index, parent) =&gt; {
+      const {lang} = node
+      const dq = node.data || {}
+      const cmdstr = lang.split(' ')
+      if(cmdstr.length &gt;= 2 &amp;&amp; cmdstr[1] === '&lt;3') {
+        node.lang = cmdstr[0]
+        dq.process = false
+        let htmlsrc = node.value
+        if(node.lang === 'js') {
+          htmlsrc = `&lt;script&gt;${node.value}&lt;/script&gt;`
+        }
+        const htmlNode = u('html', {value: htmlsrc})
+        insertions.push({node, index, parent, htmlNode})
+      }
+      node.data = data
+    })
+    insertions.forEach((insert, idx) =&gt; {
+      insert.parent.children.splice(insert.index + (idx+1), 0, insert.htmlNode)
+    })
+  }
+
+  return transformer
+}
+
+export default { tangle, process, weave, create }
+</code></pre>
+
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;img src=&quot;w3schools.jpg&quot; alt=&quot;W3Schools.com&quot; width=&quot;104&quot; height=&quot;142&quot;&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<pre><code class="language-css">code[class*=&quot;language-&quot;],
+pre[class*=&quot;language-&quot;] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*=&quot;language-&quot;] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) &gt; code[class*=&quot;language-&quot;],
+pre[class*=&quot;language-&quot;] {
+	background: #3B4251;
+}
+
+/* Inline code */
+:not(pre) &gt; code[class*=&quot;language-&quot;] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #4C5669;
+}
+
+.token.punctuation {
+	color: #D8DEE9;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+
+pre[data-line] {
+	position: relative;
+	padding: 1em 0 1em 3em;
+}
+
+.line-highlight {
+	position: absolute;
+	left: 0;
+	right: 0;
+	padding: inherit 0;
+	margin-top: 1em; /* Same as .prism’s padding-top */
+
+	background: hsla(24, 20%, 50%,.08);
+	background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+
+	pointer-events: none;
+
+	line-height: inherit;
+	white-space: pre;
+}
+
+	.line-highlight:before,
+	.line-highlight[data-end]:after {
+		content: attr(data-start);
+		position: absolute;
+		top: .4em;
+		left: .6em;
+		min-width: 1em;
+		padding: 0 .5em;
+		background-color: hsla(24, 20%, 50%,.4);
+		color: hsl(24, 20%, 95%);
+		font: bold 65%/1.5 sans-serif;
+		text-align: center;
+		vertical-align: .3em;
+		border-radius: 999px;
+		text-shadow: none;
+		box-shadow: 0 1px white;
+	}
+
+	.line-highlight[data-end]:after {
+		content: attr(data-end);
+		top: auto;
+		bottom: .4em;
+	}
+
+pre.line-numbers {
+	position: relative;
+	padding-left: 3.8em;
+	counter-reset: linenumber;
+}
+
+pre.line-numbers &gt; code {
+	position: relative;
+}
+
+.line-numbers .line-numbers-rows {
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	font-size: 100%;
+	left: -3.8em;
+	width: 3em; /* works for line-numbers below 1000 lines */
+	letter-spacing: -1px;
+	border-right: 1px solid #999;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+}
+
+	.line-numbers-rows &gt; span {
+		pointer-events: none;
+		display: block;
+		counter-increment: linenumber;
+	}
+
+		.line-numbers-rows &gt; span:before {
+			content: counter(linenumber);
+			color: #999;
+			display: block;
+			padding-right: 0.8em;
+			text-align: right;
+		}
+pre.code-toolbar {
+	position: relative;
+}
+
+pre.code-toolbar &gt; .toolbar {
+	position: absolute;
+	top: .3em;
+	right: .2em;
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0;
+}
+
+pre.code-toolbar:hover &gt; .toolbar {
+	opacity: 1;
+}
+
+pre.code-toolbar &gt; .toolbar .toolbar-item {
+	display: inline-block;
+}
+
+pre.code-toolbar &gt; .toolbar a {
+	cursor: pointer;
+}
+
+pre.code-toolbar &gt; .toolbar button {
+	background: none;
+	border: 0;
+	color: inherit;
+	font: inherit;
+	line-height: normal;
+	overflow: visible;
+	padding: 0;
+	-webkit-user-select: none; /* for button */
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+pre.code-toolbar &gt; .toolbar a,
+pre.code-toolbar &gt; .toolbar button,
+pre.code-toolbar &gt; .toolbar span {
+	color: #bbb;
+	font-size: .8em;
+	padding: 0 .5em;
+	background: #f5f2f0;
+	background: rgba(224, 224, 224, 0.2);
+	box-shadow: 0 2px 0 0 rgba(0,0,0,0.2);
+	border-radius: .5em;
+}
+
+pre.code-toolbar &gt; .toolbar a:hover,
+pre.code-toolbar &gt; .toolbar a:focus,
+pre.code-toolbar &gt; .toolbar button:hover,
+pre.code-toolbar &gt; .toolbar button:focus,
+pre.code-toolbar &gt; .toolbar span:hover,
+pre.code-toolbar &gt; .toolbar span:focus {
+	color: inherit;
+	text-decoration: none;
+}
+
+.command-line-prompt {
+	border-right: 1px solid #999;
+	display: block;
+	float: left;
+	font-size: 100%;
+	letter-spacing: -1px;
+	margin-right: 1em;
+	pointer-events: none;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.command-line-prompt &gt; span:before {
+	color: #999;
+	content: ' ';
+	display: block;
+	padding-right: 0.8em;
+}
+
+.command-line-prompt &gt; span[data-user]:before {
+	content: &quot;[&quot; attr(data-user) &quot;@&quot; attr(data-host) &quot;] $&quot;;
+}
+
+.command-line-prompt &gt; span[data-user=&quot;root&quot;]:before {
+	content: &quot;[&quot; attr(data-user) &quot;@&quot; attr(data-host) &quot;] #&quot;;
+}
+
+.command-line-prompt &gt; span[data-prompt]:before {
+	content: attr(data-prompt);
+}
+</code></pre>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'love-notes'; 
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://www.facebook.com/profile.php?id=100014010943721">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    
+    <a class="symbol" href="http://github.com/8-uh">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+    <a class="symbol" href="https://twitter.com/adabeezus">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small by-line">
+    
+       crafted with <i class="fa fa-heart red" aria-hidden="true"></i> by ada . . .
+    
+    </p>
+</footer>
+
+        </section>
+
+        
+<script src="http://8-uh.github.io/js/clipboard.min.js"></script>
+<script src="http://8-uh.github.io/js/prism.js" data-manual></script>
+<script src="http://8-uh.github.io/js/main.js"></script>
+
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-98111565-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>
