@@ -70,7 +70,7 @@
                 <section id="post-body">
                     
 
-<p>It has recently come to my attention that there is some confusion in the javascript community as to the usage of <code>const</code>. If you&rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registering in the V8 engine, I&rsquo;ll try to unravel, in as clear and plain language as possible, the mysteries of one of our newest keywords.</p>
+<p>It has recently come to my attention that there is some confusion in the javascript community as to the usage of <code>const</code>. If you&rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&rsquo;ll try to unravel, in as clear and plain language as possible, the mysteries of one of our newest keywords.</p>
 
 <h2 id="ada-s-rule">Ada&rsquo;s Rule</h2>
 
@@ -471,7 +471,7 @@ print(b);
 <p>Luckily for this article, the <strong>Ay</strong> language auto-magically assigns the correct arguments to an instance&rsquo;s properties when the constructor is called. It also applies a method on every class instance called <code>dump()</code> that will print the class&rsquo;s properties in a pretty format. For instance:</p>
 
 <pre><code class="language-C">ExamRecord er = new ExamRecord(1430, 86.3, 'B');
-er.dump()
+er.dump();
 </code></pre>
 
 <p>would produce:</p>
@@ -650,7 +650,7 @@ er-&gt;letterGrade = 'A';
 <p>Once, we&rsquo;ve set the properties for an <code>ExamGrade</code> and saved it (via some other method we&rsquo;ve written called <code>saveExamRecord()</code>), we&rsquo;ll want to create another. An expanded snippet might look like:</p>
 
 <pre><code class="language-C">ExamRecord er = new ExamRecord(1430, 86.3, 'B');
-saveExamRecord(er)
+saveExamRecord(er);
 er = new ExamRecord(1215, 71.8, 'C');
 </code></pre>
 
