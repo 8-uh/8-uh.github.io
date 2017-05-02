@@ -33,16 +33,16 @@ import remark from &#39;remark&#39; import html from &#39;remark-html&#39; impor
     </item>
     
     <item>
-      <title>About Hugo</title>
+      <title>Hi. I&#39;m Ada.</title>
       <link>https://8-uh.github.io/about/</link>
       <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
       
       <guid>https://8-uh.github.io/about/</guid>
-      <description>Hugo is a static site engine written in Go.
-It makes use of a variety of open source projects including:
- Cobra Viper J Walter Weatherman Cast  Learn more and contribute on GitHub.
-Setup Some fun facts about Hugo:
- Built in Go Loosely inspired by Jekyll Primarily developed by spf13 on the train while commuting to and from Manhattan. Coded in Vim using spf13-vim  Have questions or suggestions?</description>
+      <description>I write and write about code.
+I&amp;rsquo;ve done some things (which I&amp;rsquo;ll fill in later):
+Check out my codepen profile
+I&amp;rsquo;m currently hire-able.
+Email me: ada[at]codevinsky[dot]com</description>
     </item>
     
   </channel>
