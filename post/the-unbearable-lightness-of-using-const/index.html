@@ -1,0 +1,1275 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="love-notes">
+		<meta name="description" content="code doodles and diatribes">
+		<meta name="generator" content="Hugo 0.20.2" />
+		<title>The Unbearable Lightness of Using `const` &middot; love-notes</title>
+		<link rel="shortcut icon" href="https://8-uh.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/style.css">
+
+		<link rel="stylesheet" href="https://8-uh.github.io/css/prism.css">
+		
+
+		
+		<link rel="stylesheet" href="https://8-uh.github.io/css/font-awesome.min.css">
+		
+
+		
+		<link href="https://8-uh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="love-notes" />
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+	<a href='https://8-uh.github.io/'>~/</a>
+	
+	<a href='https://8-uh.github.io/post'>~/posts</a>
+	<a href='https://8-uh.github.io/tags'>~/tags</a>
+	<a href='https://8-uh.github.io/about'>~/about</a>
+
+	
+
+	
+	<a href="https://8-uh.github.io/index.xml">./rss.sh</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        The Unbearable Lightness of Using `const`
+                    </h1>
+                    <h2 class="headline">
+                    May 2, 2017 02:43
+                    · 3055 words
+                    · 15 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://8-uh.github.io/tags/javascript">javascript</a>
+                          
+                              <a href="https://8-uh.github.io/tags/es6">es6</a>
+                          
+                              <a href="https://8-uh.github.io/tags/"></a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>It has recently come to my attention that there is some confusion in the javascript community as to the usage of <code>const</code>. If you&rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registering in the V8 engine, I&rsquo;ll try to unravel, in as clear and plain language as possible, the mysteries of one of our newest keywords.</p>
+
+<h2 id="ada-s-rule">Ada&rsquo;s Rule</h2>
+
+<p>First things first, there is one <strong>immutable</strong> rule of JavaScript:</p>
+
+<blockquote>
+<p><em>Everything</em> is an object.</p>
+
+<p>&ndash; <em>&ldquo;Ada&rsquo;s Rule of JavaScript&rdquo;</em></p>
+</blockquote>
+
+<p>And, just as every mathematical theorem has addendum&rsquo;s, so does this one:</p>
+
+<blockquote>
+<p>Well, almost everything.</p>
+
+<p>&ndash; <em>&ldquo;Ada&rsquo;s Corollary&rdquo;</em></p>
+</blockquote>
+
+<p>In fact, it&rsquo;ll be faster for me to list the values in JavaScript that aren&rsquo;t objects:</p>
+
+<ul>
+<li><code>true</code></li>
+<li><code>false</code></li>
+<li><code>null</code></li>
+<li><code>undefined</code></li>
+</ul>
+
+<p>That&rsquo;s it. That&rsquo;s all there is&hellip; Everything else is either an <code>Object</code> type or a derivative there of.</p>
+
+<h2 id="a-diversion">A Diversion</h2>
+
+<p>In most classic compiled languages, there are language-level definitions for
+what are called <em>primitive data-types</em> or just <em>primitives</em>. Primitives only store only values and have no instance-methods of their own. To help extract the concepts from real-world implementation, I&rsquo;ve created an imaginary <strong>C</strong>-like language called <strong>Ay</strong> (<em>Ada&rsquo;s Analogue</em>). In <strong>Ay</strong>, there exists four language-defined primatives:</p>
+
+<ul>
+<li>int - stores integer values</li>
+<li>float - stores floating point numbers</li>
+<li>char - stores a single character</li>
+<li>bool - stores boolean (true/false) values</li>
+</ul>
+
+<p>In <strong>Ay</strong>, when the compiler is run, the application allocates memory in the stack for each variable based on this data type. If you&rsquo;re unfamiliar with the concept of the stack, don&rsquo;t worry about it (and if you are, just hang with me while I build an imperfect, but easy to understand analogy). Broadly speaking, the stack is the lot of memory that the application is allowed to use. To help visualize this, imagine a grid:</p>
+
+<h3 id="ay-memory-stack"><strong>Ay</strong> Memory Stack</h3>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>Using the magic of Suspension of Disbelief (for those who understand this concept better than I), one of the things that <strong>Ay</strong> does during compilation, is allocate the same amount of memory for every primitive data type. That is, each cell in the grid above can hold either an <strong>int</strong>, <strong>float</strong>, <strong>char</strong> or <strong>bool</strong>. In the real world, things are not this perfect, but again, shooting for ease of explanation, and not accuracy.</p>
+
+<p>Take a look at the following simple <strong>Ay</strong> program</p>
+
+<pre><code class="language-C">int n = 42;
+print(n);
+</code></pre>
+
+<p>All this program does is define an <strong>int</strong> called <em>n</em> with the value of <strong>42</strong> on line 1, and then print it to the console on line 2. The simplest program possible.</p>
+
+<p>What the compiler does is grab an unused cell from the stack and shove the value of <code>42</code> into that location in memory. Running this program, the memory stack could look like this after executing line 1:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td><code>42</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>When line 2 runs, the program knows to look in memory at the location <code>B:2</code> to find the value of <strong>n</strong> and then display it to the screen. But what happens if the value of <code>n</code> changes?</p>
+
+<pre><code class="language-C">int n = 42;
+print(n);
+n = 13;
+</code></pre>
+
+<p>Exactly what you&rsquo;d expect, I&rsquo;m sure:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td><code>13</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>Putting it simply, changing a primitive value changes the value stored in the memory allocated for that variable.</p>
+
+<p>Here&rsquo;s an example with all primitive types used:</p>
+
+<pre><code class="language-C">int n = 42;
+float f = 3.14159;
+char c = 'c';
+bool b = false;
+
+print(n);
+print(f);
+print(c);
+print(b);
+</code></pre>
+
+<p>And the memory stack after line 4:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td><code>42</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td><code>3.14159</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>•</td>
+<td><code>'c'</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td><code>false</code></td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>If only life could be as simple as those four primitives&hellip; But, alas, sometimes we need more complicated data structures to describe our world. Luckily, <strong>Ay</strong> is an object-oriented language that allows the definition of complicated data structures from those four types. My fiancé is studying for finals right now, so I&rsquo;m going to create an example <strong>Ay</strong> class called <code>ExamRecord</code> that fits into a larger imaginary application. For ease of discussion, the exams are anonymized with a Student ID on the scantron instead of a name (that way the professor can&rsquo;t play favorites and bump the grade). As such, each <code>ExamRecord</code> object will need to store an <code>int</code> representing the student ID, a numerical grade stored as a <code>float</code>, and a <code>char</code> letter grade:</p>
+
+<pre><code class="language-C">class ExamRecord {
+  int studentID;
+  float examGrade;
+  char letterGrade;
+}
+</code></pre>
+
+<p>Luckily for this article, the <strong>Ay</strong> language auto-magically assigns the correct arguments to an instance&rsquo;s properties when the constructor is called. It also applies a method on every class instance called <code>dump()</code> that will print the class&rsquo;s properties in a pretty format. For instance:</p>
+
+<pre><code class="language-C">ExamRecord er = new ExamRecord(1430, 86.3, 'B');
+er.dump()
+</code></pre>
+
+<p>would produce:</p>
+
+<pre><code class="language-text">--Exam Record------------
+        studentID:   1430
+        examGrade:   86.3
+      letterGrade:      B
+-------------------------
+</code></pre>
+
+<p>(One of the nicest things about using an imaginary language is that it can do whatever you want it to without writing a single line of code&hellip;)</p>
+
+<p>Take a close look at the memory stack for this new program, and you&rsquo;ll see something interesting:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>ExamRecord {<br/>studentId: B:1,<br/>examGrade: C:1,<br/>letterGrade: D:1<br/>}</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td><code>1430</code></td>
+<td><code>86.3</code></td>
+<td><code>'B'</code></td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>The memory location for <code>er</code> doesn&rsquo;t contain the values for each of the properties of <code>er</code>, but instead contains the memory locations for each value of <code>er</code>. <strong>Ay</strong> allows changing the values for each property thusly:</p>
+
+<pre><code class="language-C">er-&gt;examGrade = 92.4;
+er-&gt;letterGrade = 'A';
+</code></pre>
+
+<p>The <code>-&gt;</code> operator, in practice, is the same as the <code>.</code> operator in JavaScript. That is, it tells the <code>er</code> object to <strong>access</strong> the identified property. However, the theoretical difference here is that we&rsquo;re telling the <code>er</code> object to <strong>point</strong> to the memory location for the identified property and then access that location&rsquo;s value. The memory stack&rsquo;s state will look like this:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>ExamRecord {<br/>studentId: B:1,<br/>examGrade: C:1,<br/>letterGrade: D:1<br/>}</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td><code>1430</code></td>
+<td><code>92.4</code></td>
+<td><code>'A'</code></td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>Once, we&rsquo;ve set the properties for an <code>ExamGrade</code> and saved it (via some other method we&rsquo;ve written called <code>saveExamRecord()</code>), we&rsquo;ll want to create another. An expanded snippet might look like:</p>
+
+<pre><code class="language-C">ExamRecord er = new ExamRecord(1430, 86.3, 'B');
+saveExamRecord(er)
+er = new ExamRecord(1215, 71.8, 'C');
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>ExamRecord {<br/>studentId: B:1,<br/>examGrade: C:1,<br/>letterGrade: D:1<br/>}</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td><code>1430</code></td>
+<td><code>92.4</code></td>
+<td><code>'A'</code></td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>ExamRecord {<br/>studentId: B:3,<br/>examGrade: C:3,<br/>letterGrade: D:3<br/>}</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td><code>1215</code></td>
+<td><code>71.8</code></td>
+<td><code>'C'</code></td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>Notice that when the <code>new</code> operator is used, the program creates the instance of <code>ExamRecord</code> in an unused memory location, instead of using a previously occupied one, which differs from what happens when you assign a new value to a primitive data type. Don&rsquo;t worry about what happens to the old instance. But if you need an explanation we&rsquo;ll go with: the old instance wanders into the dark and is eaten by a grue.</p>
+
+<h2 id="this-all-seems-irrelevant">This all seems irrelevant.</h2>
+
+<p>In reality, it&rsquo;s incredibly irrelevant. But, like I said, this is all merely an analogy to help understand what happens when <code>const</code> is used. The previous exercise is a &ldquo;Good Enough&trade;&rdquo; high-level overview of what happens in a compiled language to help explain what&rsquo;s going on in JavaScript when <code>const</code> is used. But, there&rsquo;s one concept that needs to be revisited, and this time I&rsquo;m going to yell it so that it appears larger on the page:</p>
+
+<blockquote>
+<p><em>EVERYTHING</em> IS AN OBJECT!</p>
+
+<p>&ndash; <em>&ldquo;Ada&rsquo;s Rule of JavaScript&rdquo;</em></p>
+</blockquote>
+
+<p>As previously stated: JavaScript has no primitives. Everything is an object. That being said, JavaScript has some data types that <em>act</em> like primitives. For example:</p>
+
+<pre><code class="language-javascript">var n = 42
+console.log(n)
+var x = 13
+console.log(x)
+</code></pre>
+
+<p>Will produce the output:</p>
+
+<pre><code class="language-text">&gt; 42
+&gt; 13
+</code></pre>
+
+<p>The variables <code>n</code> and <code>x</code> are not of type <code>int</code> or <code>float</code>. They are <code>Number</code> objects that have methods built into them like <code>toFixed()</code>, <code>toString()</code> and <code>valueOf()</code>. In fact, the previous can be re-written as:</p>
+
+<pre><code class="language-javascript">var n = new Number(42)
+console.log(n.valueOf())
+var x = new Number(13)
+console.log(x.valueOf())
+</code></pre>
+
+<p>and the stack will look something like:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>Number { PrimitiveValue: B:1 }</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td><code>42</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Number { PrimitiveValue: B:3 }</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td><code>13</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>Further more, an interesting thing happens when you reassign a <code>Number</code> object&rsquo;s value. Take the following for example:</p>
+
+<pre><code class="language-javascript">var n = 42
+console.log(n)
+n = 13
+console.log(n)
+</code></pre>
+
+<p>with the output:</p>
+
+<pre><code class="language-text">&gt; 42
+&gt; 13
+</code></pre>
+
+<p>At the end of execution, the memory stack will look like:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>Number { PrimitiveValue: B:1 }</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td><code>42</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Number { PrimitiveValue: B:3 }</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td><code>13</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>Scroll up a bit and compare it to the previous memory stack. Go on&hellip; I&rsquo;ll wait&hellip;</p>
+
+<p><em>Ada whistle&rsquo;s a few bars of &ldquo;Girl from Impanema&rdquo;</em></p>
+
+<p>Welcome back. Did you see it? It&rsquo;s exactly the same. In JavaScript, assigning a number to a variable does <strong>not</strong> change the value of the <code>Number</code> object assigned to the variable, but instead creates a <strong>new</strong> <code>Number</code> object in memory and directs the variable to <strong>point</strong> (remember the <code>-&gt;</code> operator?) at the new memory location. While that sinks in, I must make a little service announcement&hellip;</p>
+
+<h2 id="disclaimer-this-is-not-actually-what-happens">DISCLAIMER: THIS IS NOT ACTUALLY WHAT HAPPENS</h2>
+
+<p>Look, if -anybody- reads this, I know I&rsquo;m going to get comments like &ldquo;lol, no.&rdquo;, &ldquo;do u even language spec, bro?&rdquo; (not a bro), and/or long rants about how the V8 engine is entirely more complex than the drivel I&rsquo;ve written.</p>
+
+<p>And those people are absolutely correct.</p>
+
+<p>The truth is, memory management in JavaScript is infinitely more complex than what I&rsquo;ve described. For instance, this article doesn&rsquo;t take into account the fact that V8 uses a <code>Context</code> object to encapsulate variables that exist in different scopes, nor does it actually create new <code>Number</code> objects when you change the value of <code>n</code> (it&hellip; kinda does, but&hellip; it&hellip; kinda doesn&rsquo;t? It&rsquo;s&hellip; difficult to explain&hellip; hell, it&rsquo;s difficult to understand&hellip; so much so, that I couldn&rsquo;t accurately explain it if directly asked to).</p>
+
+<p>However, the creators of ES6/7/8+ have made it their goal to make JavaScript feel more like it&rsquo;s Object-Oriented cousins (C++, Java, Swift) and less like it&rsquo;s LISP-y ancestors. That is, they have applied syntactic sugar that appears to make ES6 adhere to a more classic paradigm. As such, all of these under-the-hood mechanics can now be more easily explained using classic ideology than first wading through the muck of (what is now all but obsolete) paradigms such as prototypical inheritance (yes, commenters, I&rsquo;m aware that it&rsquo;s still what happens behind the scenes and that there are instances where it is more powerful than the <code>class</code> syntax).</p>
+
+<p>All of that being said, please do -not- take this article as Gospel. Consider it as you would the idea of Schroedinger&rsquo;s Box: It&rsquo;s imperfect and simplistic, but it gets the idea across and provides a launching pad for further understanding of a complex subject.</p>
+
+<p>If you&rsquo;d still like to eviscerate me in the comments, please at least show you&rsquo;ve done me the courtesy of reading this section by tagging your comment with <code>#lovenopes</code>, and I promise I&rsquo;ll read, respond, argue, and if necessary, amend the original article to include the new information. I want to be as knowledgable as you are, and beyond that, I want all those who aren&rsquo;t to get the right information.</p>
+
+<h2 id="and-we-re-h-b-ack">And&hellip; we&rsquo;re (h|b)ack</h2>
+
+<p>Thank you for indulging me that brief interlude&hellip; Upon re-reading everything up to this point, I realize I haven&rsquo;t answered the question that should be in your head right now: <strong>What does this have to do with <code>const</code>?</strong></p>
+
+<p>In our imaginary language, <strong>Ay</strong>, assigning a new <code>ExamGrade</code> instance to a variable actually points the variable to a new memory location that stores the individual memory locations for each property. In JavaScript, assigning an Object (that is, assigning -almost- anything) to a variable does the same thing. When you use either <code>var</code> or <code>let</code> (which is another article altogether), to store an Object, you are telling the interpreter that it&rsquo;s ok to assign a different memory location to the defined variable at a later time. When you use <code>const</code> however, the interpreted understands that once the memory address for that object is assigned, it is not allowed to assign it a different address ever again. However, this instruction does not apply to an object&rsquo;s properties.</p>
+
+<p>For instance, the <code>ExamRecord</code> class in JavaScript:</p>
+
+<pre><code class="language-javascript">class ExamRecord {
+  constructor(studentID, examGrade, letterGrade) {
+    this.studentID = studentID
+    this.examGrade = examGrade
+    this.letterGrade = letterGrade
+  }
+}
+</code></pre>
+
+<p>and in the main program:</p>
+
+<pre><code class="language-javascript">const er = new ExamRecord(1430, 86.3, 'B')
+</code></pre>
+
+<p>The stack will look something like:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>ExamRecord {<br/>&nbsp;&nbsp;studentId:&nbsp;&nbsp;&nbsp;B:1,<br/>&nbsp;&nbsp;examGrade:&nbsp;&nbsp;&nbsp;B:2,<br/>&nbsp;&nbsp;letterGrade:&nbsp;B:3<br/>}</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td>Number {PrimitiveValue: C1}</td>
+<td><code>1430</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>Number {PrimitiveValue: C2}</td>
+<td><code>86.3</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>String {PrimitiveValue: C3}</td>
+<td><code>'B'</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>If you tried to directly change the value of <code>er</code> like so:</p>
+
+<pre><code class="language-javascript">er = 12
+</code></pre>
+
+<p>In essence, you would be creating a new <code>Number</code> object, which would be created at a new memory location (let&rsquo;s say <code>A:5</code>), and then attempting to point <code>er</code> at the new memory location.</p>
+
+<p>And you&rsquo;d get a nasty looking error:
+<pre style="color: red">
+<code>VM23194:1 Uncaught TypeError: Assignment to constant variable.</code>
+</pre></p>
+
+<p>However, if you attempted to change a property of <code>er</code>, say the <code>examGrade</code> property:</p>
+
+<pre><code class="language-javascript">er.examGrade = 92.6
+</code></pre>
+
+<p>Everything would work correctly. The memory stack would look like:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>ExamRecord {<br/>&nbsp;&nbsp;studentId:&nbsp;&nbsp;&nbsp;B:1,<br/>&nbsp;&nbsp;examGrade:&nbsp;&nbsp;&nbsp;B:2,<br/>&nbsp;&nbsp;letterGrade:&nbsp;B:3<br/>}</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>•</td>
+<td>Number {PrimitiveValue: C1}</td>
+<td><code>1430</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>•</td>
+<td>Number {PrimitiveValue:<pre style="color:red; display: inline;margin-left: 0px; padding-left: 0px"> D2</pre>}</td>
+<td><code>86.3</code></td>
+<td><pre style="color:red; display: inline;margin-left: 0px; padding-left: 0px"> 92.6</pre></td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>•</td>
+<td>String {PrimitiveValue: C3}</td>
+<td><code>'B'</code></td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+<td>•</td>
+</tr>
+</tbody>
+</table>
+
+<p>This example works because an object&rsquo;s properties are not defined as <code>const</code> and are thusly allowed to point at any memory location that they please. This method also works with the elements of an <code>Array</code> because it, just like everything else, is an object:</p>
+
+<pre><code class="language-javascript">const arr = []
+arr.push(42)
+arr[1] = 13
+</code></pre>
+
+<p>When an array is asked to change the contents of an element at a given index, it is the element itself, not the array, that is being given a new memory address to point to. That is, <code>arr</code>&rsquo;s memory location never changes, but the memory location of the Object stored at the specified element does.</p>
+
+<h2 id="constraining-code">Constraining Code</h2>
+
+<p>There&rsquo;s&hellip; one other side-effect of <code>const</code> that needs to be mentioned. The Human Side-Effect. As developers, on average, we spend most of our day not -writing- code, but <strong>reading</strong> it. For those developers who use <strong>Ay</strong> on the daily, their code is intrinsically easier to understand an application&rsquo;s data flow at a glance because they have keywords to identify data types i.e.: <code>int</code>, <code>float</code>, <code>char</code>, <code>bool</code>. This makes it easier for them to find bugs in their code because the language, by design, imposes constraints on the type of data they can assign to a given variable, and therefor provides the developers with logical and visual (via syntax highlighting) context clues.</p>
+
+<p>JavaScript engineers, on the other hand, have never had that &ldquo;luxury&rdquo;. We&rsquo;ve had to maintain skepticism that a variable defined as a <code>Number</code> on line 14 would still be holding a <code>Number</code>, instead of a <code>String</code> on line 46.</p>
+
+<p>Well, no more.</p>
+
+<p>Using <code>const</code> you can help self-document your code by setting forward the <strong>intention</strong> that the value of the defined variable will not change before it is no longer needed. This isn&rsquo;t just a promise to the run-time, but also to other developers (and, even your future self).</p>
+
+<p>This, however, begs the question:</p>
+
+<h2 id="when-should-i-use-const">When Should I Use <code>const</code>?</h2>
+
+<p>I&rsquo;m glad you asked&hellip; In my opinion <code>const</code> should be used only when the value of the variable will not change, at all, between the times it is declared and goes out of scope. If you plan on changing the value of an object&rsquo;s property, don&rsquo;t use <code>const</code>. While this is a syntactically viable place to use <code>const</code>, it fails to convey the correct intention. In fact, it straight up lies to whomever is reviewing the code. On the other hand, <code>const</code> is great when used in loops or iterator functions to hold a temporary variable. I also use it to deconstruct built-ins, create simple composable functions or mathematic constants:</p>
+
+<pre><code class="language-javascript">// deconstructions
+const {PI, min, max} = Math
+
+// mathematic constants
+const TWO_PI = PI * 2
+
+// composables
+const add = (a,b) =&gt; a + b
+const createAdder = (x) =&gt; (n) =&gt; add(x,n)
+
+const add5 = createAdder(5)
+
+add5(2)
+// -&gt; 7
+</code></pre>
+
+<p>&ndash; A. Lovecraft</p>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'love-notes'; 
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://www.facebook.com/profile.php?id=100014010943721">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    
+    <a class="symbol" href="http://github.com/8-uh">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+    <a class="symbol" href="https://twitter.com/adabeezus">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small by-line">
+    
+       crafted with <i class="fa fa-heart red" aria-hidden="true"></i> by ada . . .
+    
+    </p>
+</footer>
+
+        </section>
+
+        
+<script src="https://8-uh.github.io/js/clipboard.min.js"></script>
+<script src="https://8-uh.github.io/js/prism.js" data-manual></script>
+<script src="https://8-uh.github.io/js/main.js"></script>
+
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-98111565-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>

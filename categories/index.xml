@@ -6,9 +6,28 @@
     <description>Recent content in Categories on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
+    <lastBuildDate>Tue, 02 May 2017 02:43:06 -0500</lastBuildDate>
     
 	<atom:link href="https://8-uh.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Articles</title>
+      <link>https://8-uh.github.io/categories/articles/</link>
+      <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/categories/articles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Javascript</title>
+      <link>https://8-uh.github.io/categories/javascript/</link>
+      <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/categories/javascript/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

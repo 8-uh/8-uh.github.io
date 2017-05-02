@@ -6,10 +6,20 @@
     <description>Recent content in Posts on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 25 Apr 2017 23:48:11 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 02 May 2017 02:43:06 -0500</lastBuildDate>
     
 	<atom:link href="https://8-uh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Unbearable Lightness of Using `const`</title>
+      <link>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</link>
+      <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</guid>
+      <description>It has recently come to my attention that there is some confusion in the javascript community as to the usage of const. If you&amp;rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registering in the V8 engine, I&amp;rsquo;ll try to unravel, in as clear and plain language as possible, the mysteries of one of our newest keywords.
+Ada&amp;rsquo;s Rule First things first, there is one immutable rule of JavaScript:</description>
+    </item>
     
     <item>
       <title>hello, world!</title>

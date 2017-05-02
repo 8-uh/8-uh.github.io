@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>love-notes</title>
-    <link>https://8-uh.github.io/tags/</link>
-    <description>Recent content on love-notes</description>
+    <title>Javascript on love-notes</title>
+    <link>https://8-uh.github.io/tags/javascript/</link>
+    <description>Recent content in Javascript on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 02 May 2017 02:43:06 -0500</lastBuildDate>
     
-	<atom:link href="https://8-uh.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://8-uh.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
