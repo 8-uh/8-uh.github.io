@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="love-notes">
 		<meta name="description" content="code doodles and diatribes">
-		<meta name="generator" content="Hugo 0.20.2" />
+		<meta name="generator" content="Hugo 0.21-DEV" />
 		<title>The Unbearable Lightness of Using `const` &middot; love-notes</title>
 		<link rel="shortcut icon" href="https://8-uh.github.io/images/favicon.ico">
 		<link rel="stylesheet" href="https://8-uh.github.io/css/style.css">
@@ -49,7 +49,7 @@
                     </h1>
                     <h2 class="headline">
                     May 2, 2017 02:43
-                    · 3365 words
+                    · 3406 words
                     · 16 minutes read
                       <span class="tags">
                       
@@ -70,7 +70,7 @@
                 <section id="post-body">
                     
 
-<p>It has recently come to my attention that there is some confusion in the javascript community as to the usage of <code>const</code>. If you&rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&rsquo;ll try to unravel, in as clear and plain language as possible, the mysteries of one of our newest keywords.</p>
+<p>It has recently come to my attention that there is some confusion in the javascript community as to the usage of <code>const</code>. If you&rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&rsquo;ll attempt to explain how <code>const</code> operates at the lowest-level possible. But know now, If you&rsquo;re looking for a simple answer regarding when to use <code>const</code>, well, buddy, this isn&rsquo;t the article for you. However, if you&rsquo;re curious as to how javascript handles data types and memory allocation, then, to quote my good friend Deckard Cain: &ldquo;Stay awhile&hellip; and listen!&rdquo;</p>
 
 <h2 id="ada-s-rule">Ada&rsquo;s Rule</h2>
 
@@ -1176,7 +1176,7 @@ arr[1] = 13
 
 <p><em>I posted this article on reddit and received an <a href="https://www.reddit.com/r/javascript/comments/68t71q/the_unbearable_lightness_of_using_const/dh15kp6/">incredible comment from /u/Retsam19</a>. The conversation caused me to look back at some of my recent code as well as that of community leaders writing modern js and ultimately realize that combination of murky writing and &ldquo;brain faster than fingers&rdquo; led to a combination of poor communication of ideas on my part, and down right ignoring others. The edit below incorporates Retsam19&rsquo;s suggestions and my rework of the text</em></p>
 
-<p>This is more a question of stylistics than of proper code authoring. Because of this, everyone will have a differing opinion. However, the most common modern JavaScript linter,<code>eslint</code>, has a rule (<code>prefer-const</code>) that will attempt to enforce the usage of <code>const</code> over <code>var</code> or <code>let</code>. My personal feeling on the matter, though, is: Use <code>const</code> everywhere that you can and that it makes since to; allow the usage of <code>let</code> to signify that a variable defined as such will -absolutely- change; use <code>const</code> to help manage side-effects (we&rsquo;ll talk about those later); use it in loops or iterator functions to hold a temporary variable. I also use it to deconstruct built-ins, create simple composable functions, or to store mathematic constants:</p>
+<p>This is more a question of stylistics than of proper code authoring. Because of this, everyone will have a differing opinion. However, the most common modern JavaScript linter, <code>eslint</code>, has a rule (<code>prefer-const</code>) that will attempt to enforce the usage of <code>const</code> over <code>var</code> or <code>let</code>. My personal feeling on the matter, though, is: Use <code>const</code> everywhere that you can and that it makes since to; allow the usage of <code>let</code> to signify that a variable defined as such will -absolutely- change; use <code>const</code> to help manage side-effects (we&rsquo;ll talk about those later); use it in loops or iterator functions to hold a temporary variable. I also use it to deconstruct built-ins, create simple composable functions, or to store mathematic constants:</p>
 
 <pre><code class="language-javascript">// deconstructions
 const {PI, min, max} = Math
