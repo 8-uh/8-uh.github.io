@@ -50,7 +50,7 @@
                     </h1>
                     <h2 class="headline">
                     May 8, 2017 02:50
-                    · 2845 words
+                    · 2852 words
                     · 14 minutes read
                       <span class="tags">
                       
@@ -103,13 +103,14 @@
 
 <p>Basically, the effect I&rsquo;m shooting for is the planar texture mapping used in games like Mario Kart and F-Zero. Basically, I want to use an affine transformation to figure out, for a given screen coordinate, which pixel I should map to it from a given texture.</p>
 
-<p>In short, I want to take this:
-<img src="../../img/fzero-map.png" alt="F-Zero Map" />
-and display it like:
+<p>In short, I want to take this:<br />
+<img src="../../img/fzero-map.png" alt="F-Zero Map" /></p>
+
+<p>and display it like:<br />
 <img src="../../img/f-zero-gameplay.jpg" alt="F-Zero Screenshot" /></p>
 
-<p>The article gives the most important information in the form of an equation:
-<img src="../../img/mode-7-affine.svg" alt="Mode-7 Affine Transformation" /></p>
+<p>The article gives the most important information in the form of an equation:<br />
+`[[x\`],[y\`]] = [[a,b,x_0],[c,d,y_0]][[x - x_0],[y - y_0],[1]]`</p>
 
 <p>But perhaps the second most important information is something I missed before:</p>
 
@@ -123,7 +124,7 @@ and display it like:
 
 <p><strong>5.8.2017</strong></p>
 
-<p><em>03:43</em> - First things first, gotta get a canvas defined and a source image to use. So that I can easily see what I&rsquo;m doing, I&rsquo;m going to use a 256x256 canvas and i&rsquo;m going to display the top left quarter of a 1024x1024 grid image using nothing but pixel data:
+<p><em>03:43</em> - First things first, gotta get a canvas defined and a source image to use. So that I can easily see what I&rsquo;m doing, I&rsquo;m going to use a 256x256 canvas and i&rsquo;m going to display the top left quarter of a 1024x1024 grid image using nothing but pixel data:<br />
 <img src="../../img/grid.jpg" alt="grid" /></p>
 
 <p><em>05:25</em> - There&rsquo;s a mocking bird that lives in a tree in my front yard (which is only about 15 feet from the open window I generally sit at). This morning he (yes&hellip; he&hellip; I did my research) has been singing a song that sounds a lot like he&rsquo;s trying to get the attention of someone named &ldquo;Jeffery&rdquo;. Like&hellip; incessantly, he&rsquo;s been screaming &ldquo;JEFFERYJEFFERYJEFFERYJEFFERYJEFFERY&rdquo;&hellip; and then singing a chorus of what I call &ldquo;Car Alarm in Mockingbird Minor&rdquo; (which I&rsquo;ve heard many times from him before.)</p>
@@ -236,7 +237,7 @@ async function main() {
 })
 </code></pre>
 
-<p>provides this output:
+<p>provides this output:<br />
 <img src="../../img/grid-section-middle.png" alt="grid-section-middle" /></p>
 
 <p><em>07:07</em> - A sidebar while I get Mathjax working on the blog&hellip;</p>
@@ -621,7 +622,7 @@ Let&rsquo;s check out shearing with the current setup&hellip;</p>
 
 <p><strong>Rotation About the Origin</strong></p>
 
-<p>Yup, got that too!
+<p>Yup, got that too!<br />
 <img src="https://media.giphy.com/media/26FmS7bbZKr3ibC5a/giphy.gif" alt="rotation about the origin" /></p>
 
 <script src="../../js/mode-7-md.js"></script>
