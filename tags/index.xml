@@ -1,23 +1,68 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>love-notes</title>
+    <title>Tags on love-notes</title>
     <link>https://8-uh.github.io/tags/</link>
-    <description>Recent content on love-notes</description>
+    <description>Recent content in Tags on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 02 May 2017 02:43:06 -0500</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jun 2015 14:02:37 +0200</lastBuildDate>
     
 	<atom:link href="https://8-uh.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>The Unbearable Lightness of Using `const`</title>
-      <link>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</link>
+      <title></title>
+      <link>https://8-uh.github.io/tags/</link>
       <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</guid>
-      <description>It has recently come to my attention that there is some confusion in the javascript community as to the usage of const. If you&amp;rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&amp;rsquo;ll attempt to explain how const operates at the lowest-level possible. But know now, If you&amp;rsquo;re looking for a simple answer regarding when to use const, well, buddy, this isn&amp;rsquo;t the article for you.</description>
+      <guid>https://8-uh.github.io/tags/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Canvas</title>
+      <link>https://8-uh.github.io/tags/canvas/</link>
+      <pubDate>Mon, 08 May 2017 02:50:32 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/tags/canvas/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Es6</title>
+      <link>https://8-uh.github.io/tags/es6/</link>
+      <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/tags/es6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Experiments</title>
+      <link>https://8-uh.github.io/tags/experiments/</link>
+      <pubDate>Mon, 08 May 2017 02:50:32 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/tags/experiments/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Game Dev</title>
+      <link>https://8-uh.github.io/tags/game-dev/</link>
+      <pubDate>Mon, 08 May 2017 02:50:32 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/tags/game-dev/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Javascript</title>
+      <link>https://8-uh.github.io/tags/javascript/</link>
+      <pubDate>Mon, 08 May 2017 02:50:32 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/tags/javascript/</guid>
+      <description></description>
     </item>
     
   </channel>

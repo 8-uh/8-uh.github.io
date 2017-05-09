@@ -1,0 +1,699 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="love-notes">
+		<meta name="description" content="code doodles and diatribes">
+		<meta name="generator" content="Hugo 0.21-DEV" />
+		<title>mode-seven.js: A 2D Canvas Experiment &middot; love-notes</title>
+		<link rel="shortcut icon" href="https://8-uh.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/style.css">
+
+		<link rel="stylesheet" href="https://8-uh.github.io/css/prism.css">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/jsxgraph.css">
+		
+
+		
+		<link rel="stylesheet" href="https://8-uh.github.io/css/font-awesome.min.css">
+		
+
+		
+		<link href="https://8-uh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="love-notes" />
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+	<a href='https://8-uh.github.io/'>~/</a>
+	
+	<a href='https://8-uh.github.io/post'>~/posts</a>
+	<a href='https://8-uh.github.io/tags'>~/tags</a>
+	<a href='https://8-uh.github.io/about'>~/about</a>
+
+	
+
+	
+	<a href="https://8-uh.github.io/index.xml">./rss.sh</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        mode-seven.js: A 2D Canvas Experiment
+                    </h1>
+                    <h2 class="headline">
+                    May 8, 2017 02:50
+                    · 2819 words
+                    · 14 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://8-uh.github.io/tags/experiments">experiments</a>
+                          
+                              <a href="https://8-uh.github.io/tags/javascript">javascript</a>
+                          
+                              <a href="https://8-uh.github.io/tags/canvas">canvas</a>
+                          
+                              <a href="https://8-uh.github.io/tags/game-dev">game-dev</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>If you don&rsquo;t know what <a href="https://en.wikipedia.org/wiki/Mode_7">Mode-7</a> is, then allow me a moment to enlighten you (well, allow me to copy the summary from Wikipedia).</p>
+
+<blockquote>
+<p>Mode 7 is a graphics mode on the Super NES video game console that allows a background layer to be rotated and scaled on a scanline-by-scanline basis to create many different effects. The most famous of these effects is the application of a perspective effect on a background layer by scaling and rotating the background layer in this manner. This transforms the background layer into a two-dimensional horizontal texture-mapped plane that trades height for depth. Thus, an impression of three-dimensional graphics is achieved.</p>
+</blockquote>
+
+<p>I&rsquo;ve been fascinated with this method for the past week, and have been trying to <strong>recreate</strong> it by getting as close as I can to the metal of canvas as possible. That is, I&rsquo;m interested in learning how this was done using the technology at the time, and not in mimicking it via advanced 3D frameworks.</p>
+
+<h4 id="purpose">Purpose</h4>
+
+<p>To recreate the original Super Nintendo Entertainment System&rsquo;s Mode-7 graphic&rsquo;s mode using HTML5 canvas and JavaScript</p>
+
+<h4 id="materials">Materials</h4>
+
+<ul>
+<li><a href="https://github.com/pixelbutler/pixelbutler">pixelbutler</a> - A low-level framebuffer simulator in HTML5 Canvas for making ultra low-res games.</li>
+<li><a href="https://www.google.com/chrome/">Chrome</a> - My browser&hellip; with all of the sweet dev tool goodness</li>
+<li><a href="https://atom.io">Atom</a> - My editor</li>
+<li><a href="https://www.npmjs.com/package/http-server">serve-static</a> - A small static node server</li>
+<li><a href="https://codepen.io">codepen</a> - For showing incremental progress</li>
+</ul>
+
+<h4 id="research">Research</h4>
+
+<p>The research I did for this was first to read the afore-linked <a href="https://en.wikipedia.org/wiki/Mode_7">Mode-7 Wikipedia article</a>, grab an illegal rom, and play a couple rounds of F-Zero (which is, arguably, the finest example of Mode-7 on the SNES). After spending too many <strike>minutes</strike> lost hours reliving my childhood, I decided it was time to dig into it.</p>
+
+<h4 id="method">Method</h4>
+
+<p>Basically, the effect I&rsquo;m shooting for is the planar texture mapping used in games like Mario Kart and F-Zero. Basically, I want to use an affine transformation to figure out, for a given screen coordinate, which pixel I should map to it from a given texture.</p>
+
+<p>In short, I want to take this:
+<img src="../../img/fzero-map.png" alt="F-Zero Map" />
+and display it like:
+<img src="../../img/f-zero-gameplay.jpg" alt="F-Zero Screenshot" /></p>
+
+<p>The article gives the most important information in the form of an equation:
+<img src="../../img/mode-7-affine.svg" alt="Mode-7 Affine Transformation" /></p>
+
+<p>But perhaps the second most important information is something I missed before:</p>
+
+<blockquote>
+<p>[M]any games create additional effects by setting a different transformation matrix for each scanline.</p>
+</blockquote>
+
+<h4 id="live-coding">Live Coding</h4>
+
+<p>From here till the conclusion section, I&rsquo;ll be writing stream of conscious as I attempt to solve this..</p>
+
+<p><strong>5.8.2017</strong></p>
+
+<p><em>03:43</em> - First things first, gotta get a canvas defined and a source image to use. So that I can easily see what I&rsquo;m doing, I&rsquo;m going to use a 256x256 canvas and i&rsquo;m going to display the top left quarter of a 1024x1024 grid image using nothing but pixel data:
+<img src="../../img/grid.jpg" alt="grid" /></p>
+
+<p><em>05:25</em> - There&rsquo;s a mocking bird that lives in a tree in my front yard (which is only about 15 feet from the open window I generally sit at). This morning he (yes&hellip; he&hellip; I did my research) has been singing a song that sounds a lot like he&rsquo;s trying to get the attention of someone named &ldquo;Jeffery&rdquo;. Like&hellip; incessantly, he&rsquo;s been screaming &ldquo;JEFFERYJEFFERYJEFFERYJEFFERYJEFFERY&rdquo;&hellip; and then singing a chorus of what I call &ldquo;Car Alarm in Mockingbird Minor&rdquo; (which I&rsquo;ve heard many times from him before.)</p>
+
+<p>I sure hope he finds Jeffery so he can go bother him and leave me to my studies.</p>
+
+<p>Addendum: The most annoying (and frankly astonishing) thing he&rsquo;s ever done, is learn the sounds that Ryder&rsquo;s scanner makes when she&rsquo;s getting close to an artifact in Mass Effect: Andromeda. I&rsquo;ve been sitting up, late at night working, only to hear the &ldquo;proximity warning&rdquo; from the game ring out. A clever feather is he&hellip;</p>
+
+<p>Ass.</p>
+
+<p><em>05:37</em> - Wrote a utility class to load an image from url and allow easy access of pixel data given an <code>x</code> and <code>y</code>:</p>
+
+<pre><code class="language-javascript">// Handy ImageData Interface
+class PixelData {
+  constructor(imageData, colorChannels = 4) {
+    this._imageData = imageData
+    this.colorChannels = colorChannels
+  }
+  get width() {
+    return this._imageData.width
+  }
+  get height() {
+    return this._imageData.height
+  }
+
+  // returns an array of r g b a values, respectively
+  at(x, y) {
+    const idx = (x + (y * this.width)) * this.colorChannels
+    const data = this._imageData.data
+    return [
+      data[idx],
+      data[idx+1],
+      data[idx+2],
+      data[idx+3]
+    ]
+  }
+  // return a pixelbutler color object
+  rgb(x, y) {
+    const channels = this.at(x, y)
+    return pixelbutler.rgb(
+      channels[0],
+      channels[1],
+      channels[2]
+    )
+  }
+}
+
+PixelData.fromURL = function(url) {
+  return new Promise((resolve, reject) =&gt; {
+    const img = new Image()
+    try {
+      img.onload = function() {
+        const cnvs = document.createElement('canvas')
+        cnvs.width = img.width
+        cnvs.height = img.height
+        const cntxt = cnvs.getContext('2d')
+        cntxt.drawImage(img, 0, 0)
+        const pxls = cntxt.getImageData(0,0,cnvs.width, cnvs.height)
+        resolve(new PixelData(pxls))
+      }
+      img.crossOrigin = &quot;Anonymous&quot;
+      img.src = url
+    } catch(e) {
+      reject(e)
+    }
+  })
+}
+
+</code></pre>
+
+<p>and I use it as such:</p>
+
+<pre><code class="language-javascript">let pixels
+async function main() {
+  // canvas setup //
+  pixels = await PixelData.fromURL(SRC)
+  const channels = pixels.at(20, 20)
+  // -&gt; [255, 255, 255, 1]
+  const color = pixels.rgb(20, 20)
+  // -&gt; {r: 251, g: 251, b: 251, a: 255}
+}
+</code></pre>
+
+<p><em>06:49</em> - That damn bird is -still- screaming for Jeffery.</p>
+
+<p><em>06:51</em> - And now I have a grid section displayed in my canvas by using the <code>shader</code> method of pixelbutler. All this method does is spin through every pixel in my canvas passing <code>x</code>, <code>y</code>, and <code>rgb</code> arguments to the iteration method:</p>
+
+<pre><code class="language-javascript">function loop() {
+  ctx.clear()
+  ctx.shader((x, y) =&gt; {
+    // 1 - 1 map of texture x,y to screen x,y
+    const c = pixels.rgb(x, y)
+    return c
+  })
+  ctx.render()
+
+  raf(loop)
+}
+</code></pre>
+
+<p>If I understand my path correctly, from here on in, most, if not all, code changes will reside inside of the shader&rsquo;s iteration method</p>
+
+<p><img src="../../img/grid-section.png" alt="grid section" /></p>
+
+<p><em>06:51</em> - And now to get some transformations working. First thing I want to get working is a simple planar projection. That is, I want to take my &ldquo;flat&rdquo; grid image and give it perspective. In as simple terms as I can explain it to myself, I want to transform a square section of the grid into a trapezoid, with convergence near the horizon. But first, I&rsquo;m going to shift the section of the image that I&rsquo;m pulling from to be the center 256 pixels of the grid image by shifting the pixel lookup by 384 pixels on the x axis</p>
+
+<pre><code class="language-javascript">ctx.shader((x, y) =&gt; {
+  const c = pixels.rgb(x + 384, y)
+  return c
+})
+</code></pre>
+
+<p>provides this output:
+<img src="../../img/grid-section-middle.png" alt="grid-section-middle" /></p>
+
+<p><em>07:07</em> - A sidebar while I get Mathjax working on the blog&hellip;</p>
+
+<p><em>07:42</em> - Some 2D Linear Algebra Notes:</p>
+
+<h5 id="basics">Basics</h5>
+
+<ol>
+<li>A geometric transformation will map points in one space to points in another: `(x\`, y\`, z\`) = f(x, y, z)`<br /></li>
+<li>`x\`` is pronounced: <code>x prime</code><br /></li>
+<li>A point `p = (x, y)` can be represented as a column vector `[[x],[y]]` or a row vector `[x, y]`<br /></li>
+<li>A 2-D Transformation M represented by matrix `M = [[a,b],[c,d]]`</li>
+</ol>
+
+<h5 id="super-important">Super Important</h5>
+
+<p>Then, a 2x2 transformation with `M` is: `[[x\`],[y\`]] = [[a,b],[c,d]][[x],[y]]`</p>
+
+<p>Which translates to:<br />
+`{
+  [x\` = ax + by],
+  [y\` = cx + dy]
+}`</p>
+
+<p>These two formulas form the basis for all 2D affine transformations</p>
+
+<h4 id="common-transformation-matrices">Common transformation matrices</h4>
+
+<h5 id="identity">Identity</h5>
+
+<p>values: `a = d = 1; b = c = 0`<br />
+matrix: `[[1,0],[0,1]]`<br />
+resulting formulas:<br />
+`{
+  [x\` = (1)x + (0)y rarr x\` = x],
+  [y\` = (0)x + (1)y rarr y\` = y]
+}`</p>
+
+<p>effect: Doesn&rsquo;t move the points at all</p>
+
+<h5 id="scaling">Scaling</h5>
+
+<p>values: `a&gt;0; d&gt;0; b = c = 0`<br />
+matrix: `[[a,0],[0,d]]`<br />
+example: `[[3, 0], [0, 2]]`<br />
+resulting formulas:<br />
+`{
+  [x\` = ax =&gt; (3)x =&gt; 3x],
+  [y\` = dy =&gt; (2)y =&gt; 2y]
+}`</p>
+
+<p>effect: Non-uniform (differential) scaling in both the <code>x</code> and <code>y</code> axes</p>
+
+<h5 id="reflection">Reflection</h5>
+
+<p>values: `a &lt; 0 or d &lt; 0; b = c = 0;`<br />
+matrix: `[[a,0],[0,d]]`<br />
+example: `[[-1, 0], [0, 1]]`<br />
+resulting formulas from example:<br />
+`{
+  [x\` = ax =&gt; (-1)x =&gt; -x],<br />
+  [y\` = dy =&gt; (1)y =&gt; y]
+}`
+effect: Reflection across the axis that goes negative</p>
+
+<h5 id="shear">Shear</h5>
+
+<p>values: `a=d=1; c=0; b=?;`<br />
+matrix: `[[1,b],[0,1]]`<br />
+example: `[[1, 2], [0, 1]]`<br />
+resulting formulas from example:<br />
+`{
+[x\` = ax + by =&gt; x + 2y],<br />
+[y\` = dy =&gt; (1)y =&gt; y]
+}`<br />
+effect: Reflection across the axis that goes negative</p>
+
+<h4 id="effect-on-unit-square">Effect on Unit Square</h4>
+
+<p>`[[a,b],[c,d]][bb p, bb q, bb r, bb s] = [bb p\`, bb q\`, bb r\`, bb s\`]`</p>
+
+<p>It&rsquo;s important to remember that the values identified by `[bb p, bb q, bb r, bb s]` aren&rsquo;t scalars, but individual points that make up the unit square:</p>
+
+<ul>
+<li>`bbp = [[0],[0]]` =&gt; bottom left<br /></li>
+<li>`bbq = [[1],[0]]` =&gt; bottom-right<br /></li>
+<li>`bbr = [[1],[1]]` =&gt; top-right<br /></li>
+<li>`bbs = [[0],[1]]` =&gt; top-left<br />
+Here it is again with values plugged in:<br />
+`[[a,b],[c,d]][[0,1,1,0],[0,0,1,1]] = [[0,a,a+b,b],[0,c,c+d,d]]`
+And then back out to individual points:<br /></li>
+<li>`bbp\` = {[x\` = ax + by], [y\` = cx + dy]} = [[0],[0]]` =&gt; bottom left<br /></li>
+<li>`bbq\` = {[x\` = ax + by], [y\` = cx + dy]} = [[a],[c]]` =&gt; bottom right<br /></li>
+<li>`bbr\` = {[x\` = ax + by], [y\` = cx + dy]} = [[a+b],[c+d]]` =&gt; top right<br /></li>
+<li>`bbs\` = {[x\` = ax + by], [y\` = cx + dy]} = [[b],[d]]` =&gt; top left</li>
+</ul>
+
+<p>Why do I keep adding the `x\`,y\`` formulas in there? It&rsquo;s mostly for my own personal edification. Repetition is super helpful for me.</p>
+
+<ul>
+<li>`a` and `d` give `x`- and `y`-scaling<br /></li>
+<li>`b` and `c` give `x`- and `y`-shearing</li>
+</ul>
+
+<h5 id="rotation">Rotation</h5>
+
+<p>After the above, it should be inconsequential for me to create a matrix to rotate around the origin.. Again the equation for finding the new `(x,y)` coordinates:
+`{
+  [x\` = ax + by],
+  [y\` = cx + dy]
+}`</p>
+
+<p>The set of formulas for rotating about a point are:
+`{
+  [x\` = x cos(theta) - y sin(theta)],
+  [y\` = y cos(theta) + x sin(theta)]
+}`</p>
+
+<p>Extrapolating that to what I know of matrices to this point I think it&rsquo;s safe to assume the following:<br />
+`{
+  [a = cos(theta)],
+  [b = -sin(theta)],
+  [c = sin(theta)],
+  [d = cos(theta)]
+}`</p>
+
+<p>or in matrix notation:<br />
+`[[cos(theta), -sin(theta)],[sin(theta), cos(theta)]]`</p>
+
+<p>so if I wanted to take the unit square and rotate it `30@` around the origin:</p>
+
+<p>`p\` = {[x\` = 0],[y\`=0]}`<br />
+  `q\` = {[x\` = cos(30)],[y=sin(30)]}`<br />
+  `r\` = {[x\` = cos(30) - sin(30)],[y=sin(30) + cos(30)]}`<br />
+  `s\` = {[x\` = -sin(30)],[y = cos(30)]}`</p>
+
+<p>In the plot below, The green square is the identity square: 1 unit to each side. The magenta square, is the square post rotation of 30 degrees (`0.523599 radians`)
+<div id="transformation-rotation-box" class="jxgbox" style="width: 320px; height:320px;"></div></p>
+
+<p>In short:<br />
+`M_(Rotation) = R(theta) = [[cos(theta), -sin(theta)],[sin(theta), cos(theta)]]`</p>
+
+<h5 id="linear-transformations">Linear Transformations</h5>
+
+<p>From the unit square experiment (and my reading), it appears that a 2x2 transformation also implies a representation of a point in a new coordinate system</p>
+
+<p>`bbp\``<br />
+`= bbMp`<br />
+`= [[a,b],[c,d]][[x],[y]]`<br />
+`= [bbu,bbv][[x],[y]]`<br />
+`= x*bbu+y*bbv`<br />
+Such that `bbu = [a,c]^T` and `bbv = [b,d]^T` represent vectors that define a new <strong>basis</strong> for a <strong>linear space</strong></p>
+
+<p>This transformation to a new basis is a <strong>linear transformation</strong>.</p>
+
+<p>In summary, 2x2 linear transformations can <strong>SCALE</strong>, <strong>ROTATE</strong>, <strong>REFLECT</strong> and <strong>SHEAR</strong></p>
+
+<p>But I&rsquo;m after more&hellip;</p>
+
+<p><em>10:59</em> - Hooray&hellip; more reading&hellip;</p>
+
+<h5 id="affine-transformations">Affine transformations</h5>
+
+<p>Affine transformations are based on the idea that both the <strong>BASIS</strong> and the <strong>ORIGIN</strong> can change. So, to do this&hellip; we have to augment the new linear space `bbu, bbv` with an origin `bbt`.</p>
+
+<p>Important to note:<br />
+* `bbu` and `bbv` are <strong>BASIS VECTORS</strong> (henceforth <strong>basis</strong>)<br />
+* `bbt` is a <strong>POINT</strong> (henceforth the <strong>origin</strong>)<br />
+* `bbu, bbv, bbt`, that is basis and origin, are known as a <strong>FRAME</strong> for an <strong>AFFINE SPACE</strong><br />
+Mathematically, a change of <strong>FRAME</strong>  is called an <strong>affine transformation</strong> and is represented as:<br />
+`bbp\` = x*bbu + y*bbv+bbt`</p>
+
+<h4 id="representation">Representation</h4>
+
+<p>To represent transformations among affine frames as matrices, move the problem to 3D-space by adding a third component to every point:</p>
+
+<p>`bbp\``<br />
+`= bbMp`<br />
+`= [[a,b,t_x],[c,d, t_y],[0,0,1]][[x],[y],[1]]`<br />
+`= [bbu,bbv,bbt][[x],[y],[1]]`<br />
+`= x*bbu+y*bbv+1*bbt`</p>
+
+<p>In contrast to previously:<br />
+* `[a,c,0]^T` and `[b, d, 0]^T` represent <em>vectors</em><br />
+* `[t_x, t_y, 1]^T`, `[x, y, 1]^T` and `[x\`,y\`,1]^T` prepresent <em>points</em></p>
+
+<h4 id="homogenous-coordinates">Homogenous Coordinates</h4>
+
+<p>This allows translation and transformation as a single matrix operation:<br />
+`[[x\`],[y\`],[1]] = [[1,0,t_x],[0,1,t_y],[0,0,1]][[x],[y],[1]]`<br />
+`{
+  [x\` = x + t_x],
+  [y\` = y + t_y]
+}`</p>
+
+<p>Using an origin of `bbt = [[2.25],[4.5]]`, the following affine transformation matrix is created: `[[1,0,2.25],[0,1,4.5],[0,0,1]]`</p>
+
+<div id="homogenous-transformation-box" class="jxgbox" style="width: 320px; height:320px;"></div>
+
+<p>This is nothing more than a simple translation.</p>
+
+<p>But&hellip; I think I understand a bit better&hellip;</p>
+
+<p>For example, if I wanted to:</p>
+
+<h5 id="rotate-about-an-arbitrary-point">Rotate About an Arbitrary Point</h5>
+
+<p>Which is -exactly what I&rsquo;m trying to do for F-Zero. I&rsquo;m need to rotate the track texture around the point that the player is currently at.</p>
+
+<p>Using homogenous coordinate, you can specify a rotation, `bbR_q` around any point: `bbq = [q_x, q_y,1]^T` with a matrix!!!</p>
+
+<p>Here&rsquo;s the setup code I used for these charts:</p>
+
+<pre><code class="language-javascript">const unitSquare = [
+  [0,0],
+  [1,0],
+  [1,1],
+  [0,1]
+]
+const c30 = cos(0.523599)
+const s30 = sin(0.523599)
+
+
+const transform = (points, transformer) =&gt; points.map(transformer)
+const drawSquare = (board, points) =&gt; {
+  return board.create('polygon', points.map(p =&gt; {
+    return board.create('point', p, {withLabel: false, size: 0, fixed:true})
+  }))
+}
+
+const rotationTransformer = ([x,y]) =&gt; {
+  return [
+    x*c30 + y*-s30,
+    x*s30 + y*c30
+  ]
+}
+</code></pre>
+
+<h5 id="step-0">Step 0:</h5>
+
+<p>The object to rotate and the point `bbq` to rotate around:
+<div id="arbitrary-rotation-1" class="jxgbox" style="width: 240px; height:240px;"></div></p>
+
+<p>`bbq = [[-0.5], [1.25], [1]]^T`</p>
+
+<pre><code class="language-javascript">const q = [-0.5, 1.25]
+const affineSquare0 = transform(unitSquare, ([x,y]) =&gt; [x+2, y + 4])
+const affinsq0 = drawSquare(ab1, affineSquare0)
+let qpnt = ab1.create('point', [q[0], q[1]], {size: 3, fixed: true, name: 'q0'})
+</code></pre>
+
+<h5 id="step-1">Step 1:</h5>
+
+<p>Translate `bbq` to origin
+<div id="arbitrary-rotation-2" class="jxgbox" style="width: 240px; height:240px;"></div></p>
+
+<pre><code class="language-javascript">const q0 = [-q[0], -q[1]]
+const affineSquare1 = transform(affineSquare0, ([x, y]) =&gt; [x+q0[0], y+q0[1]])
+const affinsq1 = drawSquare(ab2, affineSquare1)
+qpnt = ab2.create('point', [q[0], q[1]], {size: 3, fixed: true, name: 'q0', fillOpacity: 0.1, strokeOpacity: 0.1})
+qpnt1 = ab2.create('point', [0, 0], {size: 3, fixed: true, name: 'q1'})
+</code></pre>
+
+<h5 id="step-2">Step 2:</h5>
+
+<p>Rotate
+<div id="arbitrary-rotation-3" class="jxgbox" style="width: 240px; height:240px;"></div></p>
+
+<pre><code class="language-javascript">const affineSquare2 = transform(affineSquare1, rotationTransformer)
+const affinsq2 = drawSquare(ab3, affineSquare2)
+qpnt = ab3.create('point', [q[0], q[1]], {size: 3, fixed: true, name: 'q0', fillOpacity: 0.1, strokeOpacity: 0.1})
+qpnt1 = ab3.create('point', [0, 0], {size: 3, fixed: true, name: 'q1'})
+</code></pre>
+
+<h5 id="step-3">Step 3:</h5>
+
+<p>Translate Back
+<div id="arbitrary-rotation-4" class="jxgbox" style="width: 240px; height:240px;"></div></p>
+
+<pre><code class="language-javascript">const affineSquare3 = transform(affineSquare2, ([x, y]) =&gt; [x+q[0], y+q[1]])
+const affinsq3 = drawSquare(ab4, affineSquare3)
+qpnt = ab4.create('point', [q[0], q[1]], {size: 3, fixed: true, name: 'q0'})
+qpnt1 = ab4.create('point', [0, 0], {size: 3, fixed: true, name: 'q1', fillOpacity: 0.1, strokeOpacity: 0.1})
+</code></pre>
+
+<p><em>13:39</em> - Ok, I think I have all the information I need to make this work&hellip; I think&hellip;<br />
+<em>14:07</em> - Nope. Need to learn one one or two more concepts</p>
+
+<h5 id="barycentric-coordinates">Barycentric coordinates</h5>
+
+<p>Apparent, a set of points can be used to create an affine frame. Let&rsquo;s take, for instance, a triangle `ABC` and a point `bbp`
+<div id="barycentric-triangle" class="jxgbox" style="width: 360px; height:360px;"></div></p>
+
+<p>We can form a frame with an origin `C` and the vectors from `C` to the other vertices: `bbu = A - C`, `bbv = B - C`, `t = C`<br />
+Which then allows `bbp` to be expressed in this coordinate frame:<br />
+`bbp = alpha bbu + beta bbv + bbt`</p>
+
+<p>And I have -no- idea what that means&hellip; but it seems like, in my situation, `bbp` is the screen offset, `C` is the horizon, and `B` is the origin&hellip; does this sound right to anyone else?</p>
+
+<p>Well, the coordinates `(alpha, beta, gamma)` are called the <strong>barycentric coordinates</strong> of `bbp` relative to `A,B,` and `C`</p>
+
+<p>But&hellip; uhh.. if that&rsquo;s true, how do I -find- them?</p>
+
+<p>You know what? I think I&rsquo;m going down the wrong rabbit hole here&hellip;</p>
+
+<p><em>14:27</em> Back to code&hellip; seriously this time.</p>
+
+<h3 id="the-code">THE CODE</h3>
+
+<p>Looking again at the original Mode-7 Formula for planar texture mapping:<br />
+`[[x\`],[y\`]] = [[a,b,x_0],[c,d,y_0]][[x - x_0],[y - y_0],[1]]`</p>
+
+<p>If there&rsquo;s anything I&rsquo;ve learned, it&rsquo;s that this confusing mess should be able to be simplified down to:
+`{
+  [x\` = ax + by],
+  [y\` = cx + dy]
+}`</p>
+
+<p>But I think what I&rsquo;m really supposed to do is:
+`{
+  [x\` = ax + by + t_x],
+  [y\` = cx + dy + t_y]
+}`</p>
+
+<p>But, I&rsquo;m gonna step back and try to do some of the more simple, linear transformations first. I&rsquo;m going to use my transformer method I had setup, and I&rsquo;m simply going to run through an identity matrix to, once again, map 1-1 texture coords to screen coords.</p>
+
+<p>I&rsquo;m keeping the previously mentioned PixelData class&hellip; it&rsquo;s super handy, but aside from that, nothing&rsquo;s left from the previous.</p>
+
+<pre><code class="language-javascript">// runs points through a transformer
+const transform = (points, transformer) =&gt; points.map(transformer)
+// no transforms... just straight mapping 1,1
+const identityTransformer = ([x,y]) =&gt; [x,y]
+
+function main() {
+  /* setup and image acquisition */
+
+  // builds an array of [x,y] screen points
+  for(let y = 0; y &lt; 256; y++) {
+    for(let x = 0; x &lt; 256; x++) {
+      points.push([x, y])
+    }
+  }
+  // runs raw screen points through transformer
+  draw()
+}
+
+// a single draw call
+function draw() {
+  transformed = transform(points, createScaleTranformer(zoom))
+  ctx.clear()
+  points.forEach((p,idx) =&gt; {
+    const [x,y] = transformed[idx]
+    const pixel = pixels.rgb(x,y)
+    ctx.setPixel(p[0], p[1], pixels.rgb(x,y))
+  })
+  ctx.text(1,1,`zoom: ${zoom}`, magenta)
+  ctx.render()
+}
+
+</code></pre>
+
+<p>And, just as expected: I have a quarter of my grid image&hellip; just like -many- hours ago.</p>
+
+<p>Moving on to the next transform from above: <strong>Scaling</strong></p>
+
+<pre><code class="language-javascript">// a little scale transformer creator
+const createScaleTransformer = (a,d=a) =&gt; ([x,y]) =&gt; [~~(a*x),~~(d*y)]
+</code></pre>
+
+<p><img src="https://media.giphy.com/media/3oKIP4WCLU7YDGx37a/giphy.gif" alt="scaling example" /></p>
+
+<p><strong>Reflection</strong>
+Reflection won&rsquo;t be very visible with the current</p>
+
+<script src="../../js/mode-7-md.js"></script>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'love-notes'; 
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://www.facebook.com/profile.php?id=100014010943721">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    
+    <a class="symbol" href="http://github.com/8-uh">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+    <a class="symbol" href="https://twitter.com/adabeezus">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small by-line">
+    
+       crafted with <i class="fa fa-heart red" aria-hidden="true"></i> by ada . . .
+    
+    </p>
+</footer>
+
+        </section>
+
+        
+<script src="https://8-uh.github.io/js/clipboard.min.js"></script>
+<script src="https://8-uh.github.io/js/prism.js" data-manual></script>
+<script src="https://8-uh.github.io/js/main.js"></script>
+<script type="text/javascript"
+ src="https://8-uh.github.io/js/jsxgraphcore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=AM_CHTML"></script>
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-98111565-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>
