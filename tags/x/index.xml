@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Javascript on love-notes</title>
-    <link>https://8-uh.github.io/categories/javascript/</link>
-    <description>Recent content in Javascript on love-notes</description>
+    <title>X on love-notes</title>
+    <link>https://8-uh.github.io/tags/x/</link>
+    <description>Recent content in X on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 11 Jul 2017 13:55:11 -0500</lastBuildDate>
     
-	<atom:link href="https://8-uh.github.io/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://8-uh.github.io/tags/x/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -25,12 +25,12 @@ It&amp;rsquo;s ok, little bird. I&amp;rsquo;m gonna tell you a secret:
     </item>
     
     <item>
-      <title>The Unbearable Lightness of Using `const`</title>
-      <link>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</link>
-      <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
+      <title></title>
+      <link>https://8-uh.github.io/posts/wave-function-collapse-research/</link>
+      <pubDate>Mon, 22 May 2017 05:01:48 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</guid>
-      <description>It has recently come to my attention that there is some confusion in the javascript community as to the usage of const. If you&amp;rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&amp;rsquo;ll attempt to explain how const operates at the lowest-level possible. But know now, If you&amp;rsquo;re looking for a simple answer regarding when to use const, well, buddy, this isn&amp;rsquo;t the article for you.</description>
+      <guid>https://8-uh.github.io/posts/wave-function-collapse-research/</guid>
+      <description></description>
     </item>
     
   </channel>

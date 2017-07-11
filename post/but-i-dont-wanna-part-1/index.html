@@ -1,0 +1,251 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="love-notes">
+		<meta name="description" content="code doodles and diatribes">
+		<meta name="generator" content="Hugo 0.24.1" />
+		<title>But I Don&#39;t Wanna: An ES6 Primer for Those Resistant to Change &middot; love-notes</title>
+		<link rel="shortcut icon" href="https://8-uh.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/style.css">
+
+		<link rel="stylesheet" href="https://8-uh.github.io/css/prism.css">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/jsxgraph.css">
+		
+
+		
+		<link rel="stylesheet" href="https://8-uh.github.io/css/font-awesome.min.css">
+		
+
+		
+		<link href="https://8-uh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="love-notes" />
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+	<a href='https://8-uh.github.io/'>~/</a>
+	
+	<a href='https://8-uh.github.io/post'>~/posts</a>
+	<a href='https://8-uh.github.io/tags'>~/tags</a>
+	<a href='https://8-uh.github.io/about'>~/about</a>
+
+	
+
+	
+	<a href="https://8-uh.github.io/index.xml">./rss.sh</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        But I Don&#39;t Wanna: An ES6 Primer for Those Resistant to Change
+                    </h1>
+                    <h2 class="headline">
+                    Jul 11, 2017 13:55
+                    · 497 words
+                    · 3 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://8-uh.github.io/tags/x">x</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<h1 id="part-one-getting-started">Part One: Getting Started</h1>
+
+<h2 id="first-things-first-everything-s-gonna-be-just-fine">First Things First: Everything&rsquo;s Gonna Be Just Fine</h2>
+
+<p>Hey, remember when ES6 first started coming on the scene and you were like:<br />
+<img src="https://media.giphy.com/media/l0ExpNqEegk5eVW2A/giphy.gif" alt="" /></p>
+
+<p>It started gaining traction, new libraries were being written in it, yet still you were like:<br />
+<img src="https://media.giphy.com/media/xUA7aQKbl8jk3htphS/giphy.gif" alt="" /></p>
+
+<p>Then friends, family, co-workers, and YouTube subscribers all started using it, and yet&hellip;<br />
+<img src="https://media.giphy.com/media/3o84U1BGsvE134xA9G/giphy.gif" alt="" /></p>
+
+<p>It&rsquo;s ok, little bird. I&rsquo;m gonna tell you a secret:</p>
+
+<blockquote>
+<p>The most commonly used ES6 features are little more than shorthand syntax for the language you already know and love. And guess what? You don&rsquo;t even have to use them.</p>
+</blockquote>
+
+<p>That&rsquo;s right&hellip; ES6 is fully backwards-compatible with ES5. You can use as many or as few of the new features as you want.</p>
+
+<p>I suggest that you incorporate as many of the new features as possible for one simple reason: ES6 is faster to write than its ES5 forefather.</p>
+
+<p>By the end of this guide, you&rsquo;ll take your js skills from this:<br />
+<img src="https://media.giphy.com/media/llKJGxQ1ESmac/giphy.gif" alt="" /></p>
+
+<p>to this:<br />
+<img src="https://media.giphy.com/media/fQZX2aoRC1Tqw/giphy.gif" alt="" /></p>
+
+<h2 id="but-wait">But wait&hellip;</h2>
+
+<p>However, there are two small things we have to talk about first:</p>
+
+<ol>
+<li>Dependency Management</li>
+<li>Cross-Browser Compatibility</li>
+</ol>
+
+<p>I know I lost some readers with that tiny list alone. It&rsquo;s ok, the sound of their exasperation only fuels my resolve. Luckily, there are a number of tools available to mitigate each or both of these problems. The most common tool in use today is <a href="https://babeljs.io/">Babel</a>. However, Babel has a somewhat complicated setup and, as this book is about how to write ES6, and not how to create the best environment and toolchain, we&rsquo;re gonna take a short cut.</p>
+
+<h2 id="0-to-100-real-quick">0-to-100: Real Quick</h2>
+
+<p><strong>Three B&rsquo;s: Babel, Browserify &amp; Budo</strong></p>
+
+<ul>
+<li>Babel: An ES6 transpiler</li>
+<li>Browserify: A pluggable dependency bundler</li>
+<li>Budo: A local server that runs browserify on your code everytime you save it<br /></li>
+</ul>
+
+<p>We&rsquo;ll go into more depth about what these do later&hellip; but for now, clone the quickstart repo I&rsquo;ve created and install the package dependencies:</p>
+
+<pre><code class="language-language-bash">$ git clone https://github.com/8-uh/es6-budo.git
+$ cd es6-budo
+$ npm install
+</code></pre>
+
+<p>Once the install has finished running, open the directory in your favorite text editor (I suggest <a href="http://atom.io">Atom</a>). You should see a directory structure like:</p>
+
+<pre><code>├── src
+│  └── index.js
+├── .babelrc
+├── .gitignore
+├── bundle.js
+├── index.html
+├── package.json
+└── sakura.css
+</code></pre>
+
+<p>Now&hellip; jump back to your terminal and type:</p>
+
+<pre><code class="language-language-bash">$ npm start
+</code></pre>
+
+<p>Your browser should automatically open and you will be presented with a page that looks like:<br />
+<img src="../../img/budo-hello-world.png" alt="Budo-ES6 Hello, World!" /></p>
+
+<p>Open your devtools console (assuming you&rsquo;re using chrome&hellip; which you <em>should</em> be&hellip; press <key>cmd+alt+j</key>), and you should see:<br />
+<img src="../../img/budo-hello-console.png" alt="budo hello console" /></p>
+
+<p>Next, jump back to your editor and change the line of code in <code>index.js</code> to:</p>
+
+<pre><code class="language-js">console.log('hello, console?')
+</code></pre>
+
+<p>and save.</p>
+
+<p>If you glance back at your browser&rsquo;s console, you&rsquo;ll see that the output has changed. No need to refresh! But even more importantly&hellip; you can now write cross-browser compatible ES6 code.</p>
+
+<p>That&rsquo;s the power of Babel, Browserify, and Budo working for you.</p>
+
+<p>Ten dollars says you&rsquo;re looking at the screen like:<br />
+<img src="https://media.giphy.com/media/Hj9FQuZZIBiXS/giphy.gif" alt="" /><br />
+<em>&ldquo;I don&rsquo;t see the difference.&rdquo;</em></p>
+
+<p>And, if you&rsquo;ll just hold your horses, I&rsquo;ll show you&hellip;</p>
+
+<p>In part two.</p>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'love-notes'; 
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://www.facebook.com/profile.php?id=100014010943721">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    
+    <a class="symbol" href="http://github.com/8-uh">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+    <a class="symbol" href="https://twitter.com/adabeezus">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small by-line">
+    
+       crafted with <i class="fa fa-heart red" aria-hidden="true"></i> by ada . . .
+    
+    </p>
+</footer>
+
+        </section>
+
+        
+<script src="https://8-uh.github.io/js/clipboard.min.js"></script>
+<script src="https://8-uh.github.io/js/prism.js" data-manual></script>
+<script src="https://8-uh.github.io/js/main.js"></script>
+<script type="text/javascript"
+ src="https://8-uh.github.io/js/jsxgraphcore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=AM_CHTML"></script>
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-98111565-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>
