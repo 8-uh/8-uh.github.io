@@ -6,10 +6,23 @@
     <description>Recent content in Javascript on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 08 May 2017 02:50:32 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 11 Jul 2017 13:55:11 -0500</lastBuildDate>
     
 	<atom:link href="https://8-uh.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>But I Don&#39;t Wanna: An ES6 Primer for Those Resistant to Change</title>
+      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-1/</link>
+      <pubDate>Tue, 11 Jul 2017 13:55:11 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-1/</guid>
+      <description>Part One: Getting Started First Things First: Everything&amp;rsquo;s Gonna Be Just Fine Hey, remember when ES6 first started coming on the scene and you were like:
+It started gaining traction, new libraries were being written in it, yet still you were like:
+Then friends, family, co-workers, and YouTube subscribers all started using it, and yet&amp;hellip;
+It&amp;rsquo;s ok, little bird. I&amp;rsquo;m gonna tell you a secret:
+ The most commonly used ES6 features are little more than shorthand syntax for the language you already know and love.</description>
+    </item>
     
     <item>
       <title>mode-seven.js: A 2D Canvas Experiment</title>
