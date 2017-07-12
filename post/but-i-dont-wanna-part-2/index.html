@@ -1,0 +1,548 @@
+    <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="love-notes">
+		<meta name="description" content="code doodles and diatribes">
+		<meta name="generator" content="Hugo 0.24.1" />
+		<title>But I Don&#39;t Wanna: Part 2 [WIP] &middot; love-notes</title>
+		<link rel="shortcut icon" href="https://8-uh.github.io/images/favicon.ico">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/sakura.css">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/style.css">
+
+		<link rel="stylesheet" href="https://8-uh.github.io/css/prism.css">
+		<link rel="stylesheet" href="https://8-uh.github.io/css/jsxgraph.css">
+		
+
+		
+		<link rel="stylesheet" href="https://8-uh.github.io/css/font-awesome.min.css">
+		
+
+		
+		<link href="https://8-uh.github.io/index.xml" rel="alternate" type="application/rss+xml" title="love-notes" />
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+	<a href='https://8-uh.github.io/'>~/</a>
+	
+	<a href='https://8-uh.github.io/post'>~/posts</a>
+	<a href='https://8-uh.github.io/tags'>~/tags</a>
+	<a href='https://8-uh.github.io/about'>~/about</a>
+
+	
+
+	
+	<a href="https://8-uh.github.io/index.xml">./rss.sh</a>
+	
+</nav>
+
+
+        <section id="wrapper">
+            <article class="post">
+                <header>
+                    <h1>
+                        But I Don&#39;t Wanna: Part 2 [WIP]
+                    </h1>
+                    <h2 class="headline">
+                    Jul 12, 2017 03:18
+                    · 1606 words
+                    · 8 minutes read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://8-uh.github.io/tags/x">x</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<h1 id="part-two-mmmm-delicious">Part Two: Mmmm&hellip; Delicious</h1>
+
+<p>Jumping right in from where we left off from <a href="https://8-uh.github.io/post/but-i-dont-wanna-part-1/">Part One</a>, we&rsquo;re gonna dive straight into:</p>
+
+<h2 id="classes">Classes</h2>
+
+<p><em>&ldquo;Why start there?&rdquo;</em>, you might be asking. The truth is, proper use of classes in es6 will allow us to slowly step into new concepts using a familiar framework. Here&hellip; lemme show you:</p>
+
+<p><strong>A Classic Example of a JavaScript class</strong><br />
+Here&rsquo;s an example of an ES5 class implemented in the most correct way (with interspersings of <code>p5.js</code> so as to not have to create an entirely demonstrable API):</p>
+
+<pre><code class="language-js">var Circle = function(x, y, radius, color) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  // ES5 method of implementing defaults
+  this.color = color || '#ff0000';
+};
+
+Circle.prototype.render = function() {
+  push();
+  translate(this.x, this.y);
+  noStroke();
+  fill(this.color);
+  ellipse(0, 0, this.radius, this.radius);
+  pop();
+}
+</code></pre>
+
+<p>To use this class, somewhere in your main code, you&rsquo;d maybe write:</p>
+
+<pre><code class="language-js">var redCircle, greenCircle;
+
+function setup() {
+  //.. other setup stuff ..//
+  redCircle = new Circle(100, 100, 50);
+  greenCircle = new Circle(200, 200, 30, '#00ff00');
+}
+
+function draw() {
+  redCircle.draw();
+  greenCircle.draw();
+}
+</code></pre>
+
+<p>That seems simple enough, right? But let&rsquo;s go a step further and say that, after drawing red and green circles on the canvas for a while, you wanted to add a moving circle. One that bounces around the screen. The first option is to create a new circle, and then update its position every frame and check for bounding areas, like so:</p>
+
+<pre><code class="language-js">var redCircle,
+    greenCircle,
+    movingCircle,
+    movingCircleSpeed = 5, // move 5 pixels in both the x and axis every frame
+    movingCircleDirectionX = 1,
+    movingCircleDirectionY = 1;
+
+
+function setup() {
+  //.. other setup stuff ..//
+  redCircle = new Circle(100, 100, 50);
+  greenCircle = new Circle(200, 200, 30, '#00ff00');
+  movingCircle = new Circle(50, 50, 25, '#333');
+}
+
+function draw() {
+  redCircle.render();
+  greenCircle.render();
+  // update movingCircle's position
+  movingCircle.x += movingCircleSpeed * movingCircleDirectionX;
+  movingCircle.Y += movingCircleSpeed * movingCircleDirectionY;
+  // check for x-boundaries and reverse direction
+  if(movingCircle.x + movingCircle.radius &gt;= width ||
+  movingCircle.x - movingCircle.radius &lt;= 0) {
+    movingCircleDirectionX *= -1;
+  }
+  // check for y-boundaries and reverse direction
+  if(movingCircle.y + movingCircle.radius &gt;= height ||
+  movingCircle.y - movingCircle.radius &lt;= 0) {
+    movingCircleDirectionY *= -1;
+  }
+  movingCircle.render();
+}
+</code></pre>
+
+<p>That&rsquo;s not too bad and it&rsquo;s kinda neat&hellip; But, you get to thinking, <em>&ldquo;Hey&hellip; it&rsquo;d be neat to have a bunch of these circles bouncing around the screen while others have static position. I want each circle to bounce off the sides of the screen a few times, each time getting bigger, and then explode into a bunch of a little circles that end up doing the same thing. But to do that, I&rsquo;d need a whole bunch of global variables and it&rsquo;d be really difficult to keep track of all of that&hellip;&rdquo;.</em></p>
+
+<p>One possible solution would be to create a <em>sub</em>-class that <strong>inherits</strong> from <code>Circle</code> and, because you want a bunch of circles, you decide to follow common practice and use an Object Pool to manage them. That way you can have ExplodingCircles and static Circles. Here&rsquo;s what that would look like (re-including the base <code>Circle</code> class):</p>
+
+<pre><code class="language-js">var Circle = function(x, y, radius, color) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  // ES5 method of implementing defaults
+  this.color = color || '#ff0000';
+};
+
+Circle.prototype.render = function() {
+  push();
+  translate(this.x, this.y);
+  noStroke();
+  fill(this.color);
+  ellipse(0, 0, this.radius, this.radius);
+  pop();
+}
+
+var ExplodingCircle = function(x, y, radius, color, maxBounces, velocityX, velocitY) {
+  Circle.call(this, x, y, radius, color);
+  this.maxBounces = maxBounces;
+  this.totalBounces = 0;
+  this.velocityX = velocityX;
+  this.velocityY = velocityY;
+  this.events = new EventEmitter(); // a class that emits events and handles callbacks
+  this.alive = true;
+}
+
+ExplodingCircle.prototype = Object.create(Circle.prototype);
+ExplodingCircle.prototype.constructor = ExplodingCircle;
+
+ExplodingCircle.prototype.update = function() {
+  // Naive Euler Integration
+  this.x += this.velocityX
+  this.y += this.velocityY
+  // check for boundary collisions and reverse direction
+  this.checkCollisions()
+}
+
+ExplodingCircle.prototype.checkCollisions = function () {
+  if(this.x + this.radius &gt;= width ||  this.x - this.radius &lt;= 0) {
+    this.velocityX *= -1
+    this.bounce()
+  }
+  if(this.y + this.radius &gt;= height || this.y - this.radius &lt;= 0) {
+    this.velocityY *= -1
+    this.bounce()
+  }
+}
+
+ExplodingCircle.prototype.bounce = function() {
+  this.totalBounces++;
+  this.radius *= 1.25;
+  if(this.totalBounces === this.maxBounces) {
+    this.alive = false
+    this.events.emit('onKilled', this);
+  }
+}
+
+ExplodingCircle.prototype.reset = function(x, y, radius, color, maxBounces, velocityX, velocitY) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  this.color = color;
+  this.maxBounces = maxBounces;
+  this.velocityX = velocityX;
+  this.velocityY = velocityY;
+  this.alive = true;
+}
+// No need to implement the `draw` method as the parent class does that already
+
+// A simple ObjectPool to manage circles
+var ExplodingCircleManager = function(maxCircles) {
+  this.circles = []
+  this.maxCircles = maxCircles
+}
+
+ExplodingCircleManager.prototype.createCircle = function(x, y, radius, color, maxBounces, velocityX, velocitY) {
+  if(this.circles.length &lt; this.maxCircles) {
+    var circle = new ExplodingCircle(x, y, radius, color, maxBounces, velocityX, velocityY);
+    circle.events.addEventListener('onKilled', this.onCircleKilled.bind(this));
+    this.circles.push(circle);
+    return circle;
+  }
+  return null;
+}
+ExplodingCircleManager.prototype.update = function() {
+  for(var i = 0, len = this.circles.length; i &lt; len; i++) {
+    var circle = this.circles[i];
+    if(circle.alive === true) {
+      circle.update();
+    }
+  }
+}
+
+ExplodingCircleManager.prototype.render = function() {
+  for(var i = 0, len = this.circles.length; i &lt; len; i++) {
+    var circle = this.circles[i];
+    if(circle.alive === true) {
+      circle.render();
+    }
+  }
+}
+ExplodingCircleManager.prototype.spawn = function(x, y, directionX, directionY) {
+  var radius = random(5, 20);
+  var x = random(radius, width - radius);
+  var y = random(radius, height - radius);
+  var color = random();
+  var maxBounces = ceil(random(3,10));
+  var velocityX = random(1, 5) * directionX;
+  var velocityY = random(1, 5) * directionY;
+  var deadCircle = null;
+  var i = 0;
+  do {
+    if(this.circles[i].alive === false) {
+      deadCircle = this.circles[i];
+    }
+  } while(deadCircle == null &amp;&amp; i &lt; this.circles.length)
+
+  if(deadCircle !== null) {
+    deadCircle.reset(x, y, radius, color, velocityX, velocityY);
+  } else {
+    this.createCircle(x, y, radius, color, velocityX, velocityY);
+  }
+}
+
+ExplodingCircleManager.prototype.onCircleKilled = function(circle) {
+  var numCirclesToSpawn = random(2,5);
+  var angleToCenter = Math.atan2(circle.y, circle.x) - Math.atan2(height * 0.5, width * 0.5);
+  var spread = random(0, Math.PI);
+  var angleStep = spread / numCirclesToSpawn + 1;
+  for(var theta = angleStep; theta &lt; spread; theta += anglStep) {
+    var directionX = sign(sin(theta));
+    var directionY = sign(cos(theta));
+    this.spawn(circle.x, circle.y, directionX, directionY);
+  }
+}
+
+
+var circleManger;
+function setup() {
+  circleManager = new ExplodingCircleManager(50);
+  for(var i = 0; i &lt; 5; i++) {
+    var radius = random(5, 20);
+    var x = random(radius, width - radius);
+    var y = random(radius, height - radius);
+    var color = random(['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff','#ffff00']);
+    var maxBounces = ceil(random(3,10));
+    var velocityX = random(-5, 5);
+    var velocityY = random(-5, 5);
+    circleManager.create(x, y, radius, color, maxBounces, velocityX, velocityY);
+  }
+}
+
+function draw() {
+  circleManager.update();
+  circleManager.render();
+}
+</code></pre>
+
+<p>Now, I&rsquo;m not 100% certain this code works, as this is a rough draft&hellip;. But 5 circles should be created that bounce around the screen, and each time they bounce their radius gets bigger&hellip; until they each explode, creating 2 - 5 more circles that bounce around and do the same thing, until there are 50 circles bouncing and exploding on screen.</p>
+
+<p>That was the procedural-ES5 way to do it&hellip; Now, I present to you, the functional-ES6 way to write it. I&rsquo;ll explain each concept after the code:</p>
+
+<pre><code class="language-js">const {random, floor, PI, sign, sin, cos} = Math
+const colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff','#ffff00']
+const rrange = (start, end) =&gt; ceil(random() * (end - start)) + start
+const angleBetween = (x1, y1, x2, y2) =&gt; Math.atan2(y2 - y1, x2 - x1)
+
+const randomColor = _ =&gt; colors[floor(random() * colors.length)]
+
+class Circle {
+  constructor(x, y, radius, color='#ff0000') {
+    this.x = x
+    this.y = y
+    this.radius = radius
+    this.color = color
+  }
+  render() {
+    const {x, y, radius, color} = this
+    push()
+      translate(x, y)
+      fill(color)
+      ellipse(0, 0, radius, radius)
+    pop()
+  }
+}
+
+class ExplodingCircle extends Circle {
+
+  constructor(x, y, radius, color, maxBounces, velocityX, velocityY) {
+    super(x, y, radius, color)
+    this.maxBounces = maxBounces
+    this.totalBounces = 0
+    this.velocityX = velocityX
+    this.velocityY = velocityY
+    this.alive = true
+    this.events = new EventEmitter()
+  }
+  update() {
+    const {velocityX: vx, velocityY: vy} = this
+    this.x += vx
+    this.y += vy
+    this.checkCollisions()
+  }
+
+  checkCollision() {
+    const {x, y, radius : r} = this
+    const tests = [
+      x + r &gt;= width,
+      x - r &lt;= 0,
+      y + r &gt;= height,
+      y - r &lt;= 0
+    ]
+    if(tests.some(test =&gt; test)) {
+      const [a,b, ...c] = tests
+
+      if([a,b].some(test =&gt; test))
+        this.velocityX *= -1
+
+      if(c.some(test =&gt; test))
+        this.velocityY *= -1
+
+      this.bounce()
+    }
+  }
+
+  bounce() {
+    this.totalBounces++
+    this.radius *= 1.25
+    if(this.totalBounces === this.maxBounces) {
+      this.alive = false
+      this.events.emit('onKilled', this)
+    }
+  }
+  reset(x, y, radius, color, maxBounces, velocityX, velocityY) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.maxBounces = maxBounces;
+    this.velocityX = velocityX;
+    this.velocityY = velocityY;
+    this.alive = true;
+  }
+}
+
+class ExplodingCircleManager {
+  constructor(maxCircles) {
+    this.circles = []
+    this.maxCircles = maxCircles
+  }
+
+  createCircle(x, y, radius, color, maxBounces, velocityX, velocityY) {
+    const {circles, maxCircles} = this
+    if(circles.length &lt; maxCircles) {
+      const circle = new ExplodingCircle(x, y, radius, color, maxBounces, velocityX, velocityY)
+      circle.events.addEventListener('onKilled', c =&gt; this.onCircleKilled(c))
+      circles.push(circle)
+      return circle
+    }
+  }
+
+  forEachAlive(fn) {
+    this.circles
+      .filter(circle =&gt; circle.alive)
+      .forEach(fn)
+  }
+
+  update() {
+    this.forEachAlive(circle =&gt; circle.update())
+  }
+
+  render() {
+    this.forEachAlive(circle =&gt; circle.render())
+  }
+
+  spawn(x, y, directX, directionY) {
+    const radius = rrange(5, 20)
+    const x = rrange(radius, width - radius)
+    const y = rrange(radius, height - radius)
+    const color = randomColor()
+    const maxBounces = rrange(3, 10)
+    const velocityX = directionX * rrange(1, 5)
+    const velocityY = direcitonY * rrange(1, 5)
+    const firstDead = this.circles.find(c =&gt; !c.alive)
+    if(firstDead) {
+      firstDead.reset(x, y, radius, color, velocityX, velocityY)
+    } else {
+      this.createCircle(x, y, radius, color, velocityX, velocityY)
+    }
+  }
+
+  onCircleKilled(circle) {
+    const count = rrange(2,5)
+    const theta = angleBetween(circle.y, circle.x, height * 0.5, width * 0.5)
+    const spread = random() * PI
+    const step = spread / count + 1
+    [...Array(count).keys()]
+      .map(i =&gt; theta + step * (i+1))
+      .forEach(t =&gt; this.spawn(
+        circle.x,
+        circle.y,
+        sign(sin(t)),
+        sign(cos(t))
+      ))
+  }
+}
+</code></pre>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'love-notes'; 
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://www.facebook.com/profile.php?id=100014010943721">
+        <i class="fa fa-facebook-square"></i>
+    </a>
+    
+    <a class="symbol" href="http://github.com/8-uh">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+    <a class="symbol" href="https://twitter.com/adabeezus">
+        <i class="fa fa-twitter-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small by-line">
+    
+       crafted with <i class="fa fa-heart red" aria-hidden="true"></i> by ada . . .
+    
+    </p>
+</footer>
+
+        </section>
+
+        
+<script src="https://8-uh.github.io/js/clipboard.min.js"></script>
+<script src="https://8-uh.github.io/js/prism.js" data-manual></script>
+<script src="https://8-uh.github.io/js/main.js"></script>
+<script type="text/javascript"
+ src="https://8-uh.github.io/js/jsxgraphcore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=AM_CHTML"></script>
+
+
+
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-98111565-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+
+    </body>
+</html>
