@@ -6,10 +6,20 @@
     <description>Recent content in Javascript on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 11 Jul 2017 13:55:11 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 13 Jul 2017 15:44:11 -0500</lastBuildDate>
     
 	<atom:link href="https://8-uh.github.io/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>But I Don&#39;t Wanna: Part 2</title>
+      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</link>
+      <pubDate>Thu, 13 Jul 2017 15:44:11 -0500</pubDate>
+      
+      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</guid>
+      <description>Part Two: wtf is =&amp;gt; all about?&amp;rsquo; Let me introduce you to the arrow operator. You&amp;rsquo;ve probably seen this little guy hanging around code you&amp;rsquo;ve seen online and thought to yourself:
+I can assure you, without a doubt, that the arrow operator is not your nemesis. In fact, I&amp;rsquo;m willing to bet she&amp;rsquo;s about to become your best friend. =&amp;gt; is, in my opinion, the single most important addition to javascript in ES6.</description>
+    </item>
     
     <item>
       <title>But I Don&#39;t Wanna: Part 1</title>
@@ -22,16 +32,6 @@ It started gaining traction, new libraries were being written in it, yet still y
 Then friends, family, co-workers, and YouTube subscribers all started using it, and yet&amp;hellip;
 It&amp;rsquo;s ok, little bird. I&amp;rsquo;m gonna tell you a secret:
  The most commonly used ES6 features are little more than shorthand syntax for the language you already know and love.</description>
-    </item>
-    
-    <item>
-      <title>But I Don&#39;t Wanna: Part 2</title>
-      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</link>
-      <pubDate>Tue, 11 Jul 2017 13:55:11 -0500</pubDate>
-      
-      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</guid>
-      <description>Part Two: wtf is =&amp;gt; all about?&amp;rsquo; Let me introduce you to the arrow operator. You&amp;rsquo;ve probably seen this little guy hanging around code you&amp;rsquo;ve seen online and thought to yourself:
-I can assure you, without a doubt, that the arrow operator is not your nemesis. In fact, I&amp;rsquo;m willing to bet she&amp;rsquo;s about to become your best friend. =&amp;gt; is, in my opinion, the single most important addition to javascript in ES6.</description>
     </item>
     
     <item>
