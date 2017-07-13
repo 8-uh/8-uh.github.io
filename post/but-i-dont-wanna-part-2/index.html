@@ -7,7 +7,7 @@
 		<meta name="author" content="love-notes">
 		<meta name="description" content="code doodles and diatribes">
 		<meta name="generator" content="Hugo 0.24.1" />
-		<title>But I Don&#39;t Wanna: Part 2 [WIP] &middot; love-notes</title>
+		<title>But I Don&#39;t Wanna: Part 2 &middot; love-notes</title>
 		<link rel="shortcut icon" href="https://8-uh.github.io/images/favicon.ico">
 		<link rel="stylesheet" href="https://8-uh.github.io/css/sakura.css">
 		<link rel="stylesheet" href="https://8-uh.github.io/css/style.css">
@@ -47,17 +47,19 @@
             <article class="post">
                 <header>
                     <h1>
-                        But I Don&#39;t Wanna: Part 2 [WIP]
+                        But I Don&#39;t Wanna: Part 2
                     </h1>
                     <h2 class="headline">
-                    Jul 12, 2017 03:18
-                    · 1606 words
-                    · 8 minutes read
+                    Jul 11, 2017 13:55
+                    · 1367 words
+                    · 7 minutes read
                       <span class="tags">
                       
                       
                           
-                              <a href="https://8-uh.github.io/tags/x">x</a>
+                              <a href="https://8-uh.github.io/tags/es6">es6</a>
+                          
+                              <a href="https://8-uh.github.io/tags/javascript">javascript</a>
                           
                       
                       
@@ -68,400 +70,226 @@
                 <section id="post-body">
                     
 
-<h1 id="part-two-mmmm-delicious">Part Two: Mmmm&hellip; Delicious</h1>
+<h1 id="part-two-wtf-is-all-about">Part Two: wtf is <code>=&gt;</code> all about?&rsquo;</h1>
 
-<p>Jumping right in from where we left off from <a href="https://8-uh.github.io/post/but-i-dont-wanna-part-1/">Part One</a>, we&rsquo;re gonna dive straight into:</p>
+<p>Let me introduce you to the <strong>arrow operator</strong>. You&rsquo;ve probably seen this little guy hanging around code you&rsquo;ve seen online and thought to yourself:<br />
+<img src="https://media.giphy.com/media/3otPosB88Sj6KOBP44/giphy.gif" alt="" />
+I can assure you, without a doubt, that the arrow operator is not your nemesis. In fact, I&rsquo;m willing to bet she&rsquo;s about to become your best friend. <code>=&gt;</code> is, in my opinion, the single most important addition to javascript in ES6. But, enough of the sales pitch, let&rsquo;s see what she can actually do.</p>
 
-<h2 id="classes">Classes</h2>
+<h2 id="functional-versatility">Functional Versatility</h2>
 
-<p><em>&ldquo;Why start there?&rdquo;</em>, you might be asking. The truth is, proper use of classes in es6 will allow us to slowly step into new concepts using a familiar framework. Here&hellip; lemme show you:</p>
+<p>If the statement following an arrow operator is an expression, if will be used as the return for the encapsulating function. Suppose, for a moment, that you have a function that has only one line of code:</p>
 
-<p><strong>A Classic Example of a JavaScript class</strong><br />
-Here&rsquo;s an example of an ES5 class implemented in the most correct way (with interspersings of <code>p5.js</code> so as to not have to create an entirely demonstrable API):</p>
+<pre><code class="language-js">function multiply(a, b) {
+  return a * b;
+}
 
-<pre><code class="language-js">var Circle = function(x, y, radius, color) {
-  this.x = x;
-  this.y = y;
-  this.radius = radius;
-  // ES5 method of implementing defaults
-  this.color = color || '#ff0000';
-};
+multiply(2, 4);
+// -&gt; 8
+</code></pre>
 
-Circle.prototype.render = function() {
-  push();
-  translate(this.x, this.y);
-  noStroke();
-  fill(this.color);
-  ellipse(0, 0, this.radius, this.radius);
-  pop();
+<p>With the arrow operator, this can be re-written as a <em>function expression</em>:</p>
+
+<pre><code class="language-js">const multiply = (a, b) =&gt; a * b
+
+multiply(2, 4);
+// -&gt; 8
+</code></pre>
+
+<p>I realize that small transformation isn&rsquo;t overly impressive, but using the transitive properties of algebra, we can easily create a <em>curried</em> function in a single line of code:</p>
+
+<pre><code class="language-js">const multiplier = a =&gt; b =&gt; multiply(a, b)
+</code></pre>
+
+<p>Or, in ES5 it would look like:</p>
+
+<pre><code class="language-js">function multiplier(a) {
+  return function(b) {
+    return multiply(a, b)
+  }
 }
 </code></pre>
 
-<p>To use this class, somewhere in your main code, you&rsquo;d maybe write:</p>
+<p>Using the <code>multiplier</code> function would allow you to create a little flow like this:</p>
 
-<pre><code class="language-js">var redCircle, greenCircle;
+<pre><code class="language-js">const double = multiplier(2)
+const triple = multiplier(3)
 
-function setup() {
-  //.. other setup stuff ..//
-  redCircle = new Circle(100, 100, 50);
-  greenCircle = new Circle(200, 200, 30, '#00ff00');
+const x = 4
+
+double(x)
+// -&gt; 8
+
+triple(x)
+// -&gt; 12
+
+double(triple(x))
+// -&gt; 24
+
+const square = b =&gt; multiplier(b)(b)
+const cube = b =&gt; multiplier(square(b))(b)
+
+square(x)
+// -&gt; 16
+
+cube(x)
+// -&gt; 64
+
+cube(square(x))
+// -&gt; 4096
+</code></pre>
+
+<p>Neat, right?</p>
+
+<p>1[](<a href="https://media.giphy.com/media/10hvUFWkQEmoCs/giphy.gif">https://media.giphy.com/media/10hvUFWkQEmoCs/giphy.gif</a>)
+* ^&mdash;&ndash; You</p>
+
+<h3 id="a-history-lesson">A History Lesson</h3>
+
+<p>In the 1930&rsquo;s, a mathematician named Alonzo Church, following in the footsteps of predecessors such as Plato, Aristotle, Euclid, Descartes, Newton, and Liebniz, was attempting to determine the philosophical basis of mathematics. This led to Church&rsquo;s introduction of a formal system of mathematical logic called <code>lambda calculus</code>. There&rsquo;s a lot that can be said on this topic, but I&rsquo;m going to be exceptionally brief (while still insisting you read <a href="https://en.wikipedia.org/wiki/Lambda_calculus">Wikipedia::lambda calculus</a> and know that it is an incredibly interesting topic that is core to not only the theory of mathematics, but also philosophy, linguistics, computer science and category theory). A simple example of a lambda calculus function might look like:</p>
+
+<p>`square_sum(x,y) = x^2 + y^2`</p>
+
+<p>or, in what&rsquo;s called the <em>anonymous</em> form (meaning that the lambda function isn&rsquo;t named as above):
+`(x,y) |-&gt; x^2 + y^2`</p>
+
+<p>Visually speaking, the above function looks a lot like the <code>multiply</code> function expression from above:</p>
+
+<pre><code class="language-js">(a,b) =&gt; a * b
+</code></pre>
+
+<p>Doesn&rsquo;t it?</p>
+
+<p>There&rsquo;s a reason for that. A programming methodolgy arose from lambda calculus called <code>functional programming</code> and was the basis for classic languages such as LISP and APL, and the more modern Kotlin and Haskell. But, it&rsquo;s a little known fact that JavaScript (<em>née LiveScript, née MochaScript</em>) was originally conceived as a purely functional language and has always the hallmark traits of one, with the most obvious being the fact that developers are able to pass a function as an argument to another function. You&rsquo;ve probably used this ability before when adding an event listener. The callback argument is always a function (or a function expression).</p>
+
+<p><img src="https://media.giphy.com/media/y8btJ3OOxT4sg/giphy.gif" alt="" /></p>
+
+<p>Ok&hellip; sorry about that&hellip; You&rsquo;re right&hellip; this is a lesson on the <code>=&gt;</code> operator&hellip; and not a lesson on functional programming&hellip;</p>
+
+<h2 id="or-is-it">&hellip;or&hellip; is it?</h2>
+
+<p>One of the most common places you see the arrow operator is its use in certain <code>Array</code> methods. Let&rsquo;s say you have an array of numbers:</p>
+
+<pre><code class="language-js">const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+</code></pre>
+
+<p>And your goal is to obtain an array of only the even numbers. There are a few ways to do this. The <em>imperative</em> way (that is, the non-functional way) to do this in ES5 would be:</p>
+
+<pre><code class="language-js">var evens = []
+for(var i = 0; i &lt; nums.length; i++) {
+  var n = nums[i]
+  if(n % 2 === 0) {
+    evens.push(n)
+  }
 }
+// -&gt; evens: [2, 4, 6, 8, 10]
+</code></pre>
 
-function draw() {
-  redCircle.draw();
-  greenCircle.draw();
+<p>But in functional ES6:</p>
+
+<pre><code class="language-js">const evens = nums.filter(n =&gt; n % 2 === 0)
+// -&gt; evens: [2, 4, 6, 8, 10]
+</code></pre>
+
+<p>The <code>filter</code> Array method calls the anonymous (there&rsquo;s that word again) <em>iterator</em> function provided as an argument for every item in the array and then outputs a new array containing each item that the iterator function returned true for. (Whew&hellip; that was a helluva a sentence to write.) Many of the methods on the <code>Array</code> prototype follow this same pattern and are examples of functional programming inherent in javascript.</p>
+
+<p>Now, let&rsquo;s take that same scenario and add an extra level of requirements to the goal <code>With the original array of numbers, calculate the sum of the squares of every even number</code></p>
+
+<p>Imperative ES5</p>
+
+<pre><code class="language-js">var sum = 0
+for(var i = 0; i &lt; nums.length; i++) {
+  var n = nums[i]
+  if(n % 2 === 0) {
+    sum += n*n
+  }
 }
 </code></pre>
 
-<p>That seems simple enough, right? But let&rsquo;s go a step further and say that, after drawing red and green circles on the canvas for a while, you wanted to add a moving circle. One that bounces around the screen. The first option is to create a new circle, and then update its position every frame and check for bounding areas, like so:</p>
+<p>Functional ES6</p>
 
-<pre><code class="language-js">var redCircle,
-    greenCircle,
-    movingCircle,
-    movingCircleSpeed = 5, // move 5 pixels in both the x and axis every frame
-    movingCircleDirectionX = 1,
-    movingCircleDirectionY = 1;
+<pre><code class="language-js">
+const square = n =&gt; n*n
 
+const sum = nums
+              .filter(n =&gt; n % 2 === 0)
+              .map(square)
+              .reduce((agg, n) =&gt; agg + n, 0)
+</code></pre>
 
-function setup() {
-  //.. other setup stuff ..//
-  redCircle = new Circle(100, 100, 50);
-  greenCircle = new Circle(200, 200, 30, '#00ff00');
-  movingCircle = new Circle(50, 50, 25, '#333');
-}
+<p>There&rsquo;s a bit going on here, so let&rsquo;s take a closer look.
+We are already familiar with the fact that our implementation of <code>filter</code> returns an array of even numbers. But, because it returns an array, we can then <em>flow</em> to another Array method called <code>map</code>. The <code>map</code> method calls the given <em>iterator</em> function argument for every element in the array and returns a new Array containing the outputs from the <em>iterator</em> function. If we were to log the output from <code>map</code> we&rsquo;d see:</p>
 
-function draw() {
-  redCircle.render();
-  greenCircle.render();
-  // update movingCircle's position
-  movingCircle.x += movingCircleSpeed * movingCircleDirectionX;
-  movingCircle.Y += movingCircleSpeed * movingCircleDirectionY;
-  // check for x-boundaries and reverse direction
-  if(movingCircle.x + movingCircle.radius &gt;= width ||
-  movingCircle.x - movingCircle.radius &lt;= 0) {
-    movingCircleDirectionX *= -1;
-  }
-  // check for y-boundaries and reverse direction
-  if(movingCircle.y + movingCircle.radius &gt;= height ||
-  movingCircle.y - movingCircle.radius &lt;= 0) {
-    movingCircleDirectionY *= -1;
-  }
-  movingCircle.render();
+<pre><code>[4, 16, 36, 64, 100]
+</code></pre>
+
+<p>And, again, because the output from <code>map</code> is an array we can <em>flow</em> a <code>reduce</code> call on it. <code>reduce</code> has two arguments: the first being an <em>iterator</em> function, and the second, a seed value. The <em>iterator</em> function for <code>reduce</code> alsp expects (at least) two arguments: an aggregator value (<code>agg</code>) and an element value (&lsquo;n&rsquo;). For every element in the array, reduce passes in either the output from the previous iteration, or the seed value, ns value of the element. In our case, we&rsquo;re simply adding the value of the current element to the current total. After the last array element has been processed, <code>reduce</code> returns the value of the last iteration. Thus, the variable <code>sum</code> contains the value <code>220</code> once the iteration concludes.</p>
+
+<p><em>(Author&rsquo;s note: reword that lat paragraph)</em></p>
+
+<p>So far, every <code>iterator</code> method we&rsquo;ve written has been a <em>pure</em> function. To be called <em>pure</em>, a function:</p>
+
+<ul>
+<li>MUST NOT change or mutate the supplied state</li>
+<li>MUST NOT change, mutate, or consume the value of state outside the scope of the function or cause I/O to happen (these changes are known as side-effects.)</li>
+<li>MUST return a new value, or function</li>
+<li>MUST be provable (i.e.: given the same input 1000 times, the function must return the same output 1000 times)</li>
+</ul>
+
+<p>However, there&rsquo;s at least one array iteration method that is specifically designed to create side-effects.</p>
+
+<p><strong>forEach</strong></p>
+
+<p>Suppose we have a collection of Circle objects <code>{x, y, radius, color, alpha[0 - 100]}</code> and we want to increase the radius of each circle by 3% and decrease the opacity by 1, and then draw it using proper <code>p5</code> api calls. We could use a classic <code>for</code> loop to iterate over the collection.</p>
+
+<p>Imperative ES5</p>
+
+<pre><code class="language-js">for(var i = 0; i &lt; circles.length; i++) {
+  var circle = circles[i]
+  circle.radius *= 1.03
+  circle.alpha--
+  push()
+  fill(circle.color)
+  noStroke()
+  translate(circle.x, circle.y)
+  ellipse(0, 0, circle.radius, circle.radius)
+  pop()
 }
 </code></pre>
 
-<p>That&rsquo;s not too bad and it&rsquo;s kinda neat&hellip; But, you get to thinking, <em>&ldquo;Hey&hellip; it&rsquo;d be neat to have a bunch of these circles bouncing around the screen while others have static position. I want each circle to bounce off the sides of the screen a few times, each time getting bigger, and then explode into a bunch of a little circles that end up doing the same thing. But to do that, I&rsquo;d need a whole bunch of global variables and it&rsquo;d be really difficult to keep track of all of that&hellip;&rdquo;.</em></p>
+<p>Or instead</p>
 
-<p>One possible solution would be to create a <em>sub</em>-class that <strong>inherits</strong> from <code>Circle</code> and, because you want a bunch of circles, you decide to follow common practice and use an Object Pool to manage them. That way you can have ExplodingCircles and static Circles. Here&rsquo;s what that would look like (re-including the base <code>Circle</code> class):</p>
+<p>Functional ES6</p>
 
-<pre><code class="language-js">var Circle = function(x, y, radius, color) {
-  this.x = x;
-  this.y = y;
-  this.radius = radius;
-  // ES5 method of implementing defaults
-  this.color = color || '#ff0000';
-};
-
-Circle.prototype.render = function() {
-  push();
-  translate(this.x, this.y);
-  noStroke();
-  fill(this.color);
-  ellipse(0, 0, this.radius, this.radius);
-  pop();
+<pre><code class="language-js">// side-effects
+const drawCircle = c =&gt; {
+  push()
+  fill(circle.color)
+  noStroke()
+  translate(circle.x, c.y)
+  ellipse(0, 0, code.radius, c.radius)
+  pop()
 }
 
-var ExplodingCircle = function(x, y, radius, color, maxBounces, velocityX, velocitY) {
-  Circle.call(this, x, y, radius, color);
-  this.maxBounces = maxBounces;
-  this.totalBounces = 0;
-  this.velocityX = velocityX;
-  this.velocityY = velocityY;
-  this.events = new EventEmitter(); // a class that emits events and handles callbacks
-  this.alive = true;
-}
+const fade = step =&gt; c =&gt; c.alpha += step
+const fadeOut = fade(-1)
 
-ExplodingCircle.prototype = Object.create(Circle.prototype);
-ExplodingCircle.prototype.constructor = ExplodingCircle;
+const stretch = percent =&gt; c =&gt; c.radius *= percent
+const grow = stretch(1.03)
 
-ExplodingCircle.prototype.update = function() {
-  // Naive Euler Integration
-  this.x += this.velocityX
-  this.y += this.velocityY
-  // check for boundary collisions and reverse direction
-  this.checkCollisions()
-}
-
-ExplodingCircle.prototype.checkCollisions = function () {
-  if(this.x + this.radius &gt;= width ||  this.x - this.radius &lt;= 0) {
-    this.velocityX *= -1
-    this.bounce()
-  }
-  if(this.y + this.radius &gt;= height || this.y - this.radius &lt;= 0) {
-    this.velocityY *= -1
-    this.bounce()
-  }
-}
-
-ExplodingCircle.prototype.bounce = function() {
-  this.totalBounces++;
-  this.radius *= 1.25;
-  if(this.totalBounces === this.maxBounces) {
-    this.alive = false
-    this.events.emit('onKilled', this);
-  }
-}
-
-ExplodingCircle.prototype.reset = function(x, y, radius, color, maxBounces, velocityX, velocitY) {
-  this.x = x;
-  this.y = y;
-  this.radius = radius;
-  this.color = color;
-  this.maxBounces = maxBounces;
-  this.velocityX = velocityX;
-  this.velocityY = velocityY;
-  this.alive = true;
-}
-// No need to implement the `draw` method as the parent class does that already
-
-// A simple ObjectPool to manage circles
-var ExplodingCircleManager = function(maxCircles) {
-  this.circles = []
-  this.maxCircles = maxCircles
-}
-
-ExplodingCircleManager.prototype.createCircle = function(x, y, radius, color, maxBounces, velocityX, velocitY) {
-  if(this.circles.length &lt; this.maxCircles) {
-    var circle = new ExplodingCircle(x, y, radius, color, maxBounces, velocityX, velocityY);
-    circle.events.addEventListener('onKilled', this.onCircleKilled.bind(this));
-    this.circles.push(circle);
-    return circle;
-  }
-  return null;
-}
-ExplodingCircleManager.prototype.update = function() {
-  for(var i = 0, len = this.circles.length; i &lt; len; i++) {
-    var circle = this.circles[i];
-    if(circle.alive === true) {
-      circle.update();
-    }
-  }
-}
-
-ExplodingCircleManager.prototype.render = function() {
-  for(var i = 0, len = this.circles.length; i &lt; len; i++) {
-    var circle = this.circles[i];
-    if(circle.alive === true) {
-      circle.render();
-    }
-  }
-}
-ExplodingCircleManager.prototype.spawn = function(x, y, directionX, directionY) {
-  var radius = random(5, 20);
-  var x = random(radius, width - radius);
-  var y = random(radius, height - radius);
-  var color = random();
-  var maxBounces = ceil(random(3,10));
-  var velocityX = random(1, 5) * directionX;
-  var velocityY = random(1, 5) * directionY;
-  var deadCircle = null;
-  var i = 0;
-  do {
-    if(this.circles[i].alive === false) {
-      deadCircle = this.circles[i];
-    }
-  } while(deadCircle == null &amp;&amp; i &lt; this.circles.length)
-
-  if(deadCircle !== null) {
-    deadCircle.reset(x, y, radius, color, velocityX, velocityY);
-  } else {
-    this.createCircle(x, y, radius, color, velocityX, velocityY);
-  }
-}
-
-ExplodingCircleManager.prototype.onCircleKilled = function(circle) {
-  var numCirclesToSpawn = random(2,5);
-  var angleToCenter = Math.atan2(circle.y, circle.x) - Math.atan2(height * 0.5, width * 0.5);
-  var spread = random(0, Math.PI);
-  var angleStep = spread / numCirclesToSpawn + 1;
-  for(var theta = angleStep; theta &lt; spread; theta += anglStep) {
-    var directionX = sign(sin(theta));
-    var directionY = sign(cos(theta));
-    this.spawn(circle.x, circle.y, directionX, directionY);
-  }
-}
+const transform = c =&gt; [grow, fadeOut].forEach(f =&gt; f(c))
+const transformAndDraw = c =&gt; [transform, drawCircle].forEach(f =&gt; f(c))
 
 
-var circleManger;
-function setup() {
-  circleManager = new ExplodingCircleManager(50);
-  for(var i = 0; i &lt; 5; i++) {
-    var radius = random(5, 20);
-    var x = random(radius, width - radius);
-    var y = random(radius, height - radius);
-    var color = random(['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff','#ffff00']);
-    var maxBounces = ceil(random(3,10));
-    var velocityX = random(-5, 5);
-    var velocityY = random(-5, 5);
-    circleManager.create(x, y, radius, color, maxBounces, velocityX, velocityY);
-  }
-}
-
-function draw() {
-  circleManager.update();
-  circleManager.render();
+// run every frame
+draw() {
+  circles.forEach(transformAndDraw)
 }
 </code></pre>
 
-<p>Now, I&rsquo;m not 100% certain this code works, as this is a rough draft&hellip;. But 5 circles should be created that bounce around the screen, and each time they bounce their radius gets bigger&hellip; until they each explode, creating 2 - 5 more circles that bounce around and do the same thing, until there are 50 circles bouncing and exploding on screen.</p>
+<h2 id="but-wait-there-s-more">But Wait&hellip; There&rsquo;s more!</h2>
 
-<p>That was the procedural-ES5 way to do it&hellip; Now, I present to you, the functional-ES6 way to write it. I&rsquo;ll explain each concept after the code:</p>
-
-<pre><code class="language-js">const {random, floor, PI, sign, sin, cos} = Math
-const colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff','#ffff00']
-const rrange = (start, end) =&gt; ceil(random() * (end - start)) + start
-const angleBetween = (x1, y1, x2, y2) =&gt; Math.atan2(y2 - y1, x2 - x1)
-
-const randomColor = _ =&gt; colors[floor(random() * colors.length)]
-
-class Circle {
-  constructor(x, y, radius, color='#ff0000') {
-    this.x = x
-    this.y = y
-    this.radius = radius
-    this.color = color
-  }
-  render() {
-    const {x, y, radius, color} = this
-    push()
-      translate(x, y)
-      fill(color)
-      ellipse(0, 0, radius, radius)
-    pop()
-  }
-}
-
-class ExplodingCircle extends Circle {
-
-  constructor(x, y, radius, color, maxBounces, velocityX, velocityY) {
-    super(x, y, radius, color)
-    this.maxBounces = maxBounces
-    this.totalBounces = 0
-    this.velocityX = velocityX
-    this.velocityY = velocityY
-    this.alive = true
-    this.events = new EventEmitter()
-  }
-  update() {
-    const {velocityX: vx, velocityY: vy} = this
-    this.x += vx
-    this.y += vy
-    this.checkCollisions()
-  }
-
-  checkCollision() {
-    const {x, y, radius : r} = this
-    const tests = [
-      x + r &gt;= width,
-      x - r &lt;= 0,
-      y + r &gt;= height,
-      y - r &lt;= 0
-    ]
-    if(tests.some(test =&gt; test)) {
-      const [a,b, ...c] = tests
-
-      if([a,b].some(test =&gt; test))
-        this.velocityX *= -1
-
-      if(c.some(test =&gt; test))
-        this.velocityY *= -1
-
-      this.bounce()
-    }
-  }
-
-  bounce() {
-    this.totalBounces++
-    this.radius *= 1.25
-    if(this.totalBounces === this.maxBounces) {
-      this.alive = false
-      this.events.emit('onKilled', this)
-    }
-  }
-  reset(x, y, radius, color, maxBounces, velocityX, velocityY) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.maxBounces = maxBounces;
-    this.velocityX = velocityX;
-    this.velocityY = velocityY;
-    this.alive = true;
-  }
-}
-
-class ExplodingCircleManager {
-  constructor(maxCircles) {
-    this.circles = []
-    this.maxCircles = maxCircles
-  }
-
-  createCircle(x, y, radius, color, maxBounces, velocityX, velocityY) {
-    const {circles, maxCircles} = this
-    if(circles.length &lt; maxCircles) {
-      const circle = new ExplodingCircle(x, y, radius, color, maxBounces, velocityX, velocityY)
-      circle.events.addEventListener('onKilled', c =&gt; this.onCircleKilled(c))
-      circles.push(circle)
-      return circle
-    }
-  }
-
-  forEachAlive(fn) {
-    this.circles
-      .filter(circle =&gt; circle.alive)
-      .forEach(fn)
-  }
-
-  update() {
-    this.forEachAlive(circle =&gt; circle.update())
-  }
-
-  render() {
-    this.forEachAlive(circle =&gt; circle.render())
-  }
-
-  spawn(x, y, directX, directionY) {
-    const radius = rrange(5, 20)
-    const x = rrange(radius, width - radius)
-    const y = rrange(radius, height - radius)
-    const color = randomColor()
-    const maxBounces = rrange(3, 10)
-    const velocityX = directionX * rrange(1, 5)
-    const velocityY = direcitonY * rrange(1, 5)
-    const firstDead = this.circles.find(c =&gt; !c.alive)
-    if(firstDead) {
-      firstDead.reset(x, y, radius, color, velocityX, velocityY)
-    } else {
-      this.createCircle(x, y, radius, color, velocityX, velocityY)
-    }
-  }
-
-  onCircleKilled(circle) {
-    const count = rrange(2,5)
-    const theta = angleBetween(circle.y, circle.x, height * 0.5, width * 0.5)
-    const spread = random() * PI
-    const step = spread / count + 1
-    [...Array(count).keys()]
-      .map(i =&gt; theta + step * (i+1))
-      .forEach(t =&gt; this.spawn(
-        circle.x,
-        circle.y,
-        sign(sin(t)),
-        sign(cos(t))
-      ))
-  }
-}
-</code></pre>
+<p>Short-hand function expressions isn&rsquo;t all our little friend, <code>=&gt;</code>, can do. But you&rsquo;ll have to wait to find out until next time&hellip;</p>
 
                 </section>
             </article>
