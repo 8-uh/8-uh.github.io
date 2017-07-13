@@ -48,14 +48,14 @@
   </url>
   
   <url>
-    <loc>https://8-uh.github.io/tags/</loc>
-    <lastmod>2017-05-02T02:43:06-05:00</lastmod>
+    <loc>https://8-uh.github.io/categories/</loc>
+    <lastmod>2017-05-22T05:01:48-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://8-uh.github.io/categories/</loc>
-    <lastmod>2017-05-22T05:01:48-05:00</lastmod>
+    <loc>https://8-uh.github.io/tags/</loc>
+    <lastmod>2017-05-02T02:43:06-05:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -78,13 +78,13 @@
   </url>
   
   <url>
-    <loc>https://8-uh.github.io/tags/es6/</loc>
+    <loc>https://8-uh.github.io/categories/es6/</loc>
     <lastmod>2017-07-13T15:44:11-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://8-uh.github.io/categories/es6/</loc>
+    <loc>https://8-uh.github.io/tags/es6/</loc>
     <lastmod>2017-07-13T15:44:11-05:00</lastmod>
     <priority>0</priority>
   </url>
@@ -102,13 +102,13 @@
   </url>
   
   <url>
-    <loc>https://8-uh.github.io/tags/javascript/</loc>
+    <loc>https://8-uh.github.io/categories/javascript/</loc>
     <lastmod>2017-07-13T15:44:11-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://8-uh.github.io/categories/javascript/</loc>
+    <loc>https://8-uh.github.io/tags/javascript/</loc>
     <lastmod>2017-07-13T15:44:11-05:00</lastmod>
     <priority>0</priority>
   </url>
