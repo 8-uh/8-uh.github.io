@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Halp on love-notes</title>
-    <link>https://8-uh.github.io/tags/halp/</link>
+    <link>https://ada-lovecraft.github.io/tags/halp/</link>
     <description>Recent content in Halp on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 10 Aug 2017 20:44:11 -0500</lastBuildDate>
     
-	<atom:link href="https://8-uh.github.io/tags/halp/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ada-lovecraft.github.io/tags/halp/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Geopositional Deltas Expressed As Meters</title>
-      <link>https://8-uh.github.io/post/geopositional-deltas-expressed-as-meters/</link>
+      <link>https://ada-lovecraft.github.io/post/geopositional-deltas-expressed-as-meters/</link>
       <pubDate>Thu, 10 Aug 2017 20:44:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/geopositional-deltas-expressed-as-meters/</guid>
+      <guid>https://ada-lovecraft.github.io/post/geopositional-deltas-expressed-as-meters/</guid>
       <description>Algorithm to achieve 1m of displacement as Degrees of Latitude and Longitude North/South Deltas: This conversion is static no matter where you are on earth
 =&amp;gt; 1Lat = 110.574km
 1Lat = 110574m

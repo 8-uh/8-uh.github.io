@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on love-notes</title>
-    <link>https://8-uh.github.io/post/</link>
+    <link>https://ada-lovecraft.github.io/post/</link>
     <description>Recent content in Posts on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 10 Aug 2017 20:44:11 -0500</lastBuildDate>
     
-	<atom:link href="https://8-uh.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ada-lovecraft.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Geopositional Deltas Expressed As Meters</title>
-      <link>https://8-uh.github.io/post/geopositional-deltas-expressed-as-meters/</link>
+      <link>https://ada-lovecraft.github.io/post/geopositional-deltas-expressed-as-meters/</link>
       <pubDate>Thu, 10 Aug 2017 20:44:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/geopositional-deltas-expressed-as-meters/</guid>
+      <guid>https://ada-lovecraft.github.io/post/geopositional-deltas-expressed-as-meters/</guid>
       <description>Algorithm to achieve 1m of displacement as Degrees of Latitude and Longitude North/South Deltas: This conversion is static no matter where you are on earth
 =&amp;gt; 1Lat = 110.574km
 1Lat = 110574m
@@ -27,20 +27,20 @@ const METERS_TO_LATITUDE = 0.00000904371732957115 const latitudeDelta = meters =
     
     <item>
       <title>But I Don&#39;t Wanna: Part 2</title>
-      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</link>
+      <link>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-2/</link>
       <pubDate>Thu, 13 Jul 2017 15:44:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</guid>
+      <guid>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-2/</guid>
       <description>Part Two: wtf is =&amp;gt; all about?&amp;rsquo; Let me introduce you to the arrow operator. You&amp;rsquo;ve probably seen this little guy hanging around code you&amp;rsquo;ve seen online and thought to yourself:
 I can assure you, without a doubt, that the arrow operator is not your nemesis. In fact, I&amp;rsquo;m willing to bet she&amp;rsquo;s about to become your best friend. =&amp;gt; is, in my opinion, the single most important addition to javascript in ES6.</description>
     </item>
     
     <item>
       <title>But I Don&#39;t Wanna: Part 1</title>
-      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-1/</link>
+      <link>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-1/</link>
       <pubDate>Tue, 11 Jul 2017 13:55:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-1/</guid>
+      <guid>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-1/</guid>
       <description>Part One: Getting Started First Things First: Everything&amp;rsquo;s Gonna Be Just Fine Hey, remember when ES6 first started coming on the scene and you were like:
 It started gaining traction, new libraries were being written in it, yet still you were like:
 Then friends, family, co-workers, and YouTube subscribers all started using it, and yet&amp;hellip;
@@ -50,29 +50,29 @@ It&amp;rsquo;s ok, little bird. I&amp;rsquo;m gonna tell you a secret:
     
     <item>
       <title>mode-seven.js: A 2D Canvas Experiment</title>
-      <link>https://8-uh.github.io/post/mode-seven/</link>
+      <link>https://ada-lovecraft.github.io/post/mode-seven/</link>
       <pubDate>Mon, 08 May 2017 02:50:32 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/mode-seven/</guid>
+      <guid>https://ada-lovecraft.github.io/post/mode-seven/</guid>
       <description>If you don&amp;rsquo;t know what Mode-7 is, then allow me a moment to enlighten you (well, allow me to copy the summary from Wikipedia).
  Mode 7 is a graphics mode on the Super NES video game console that allows a background layer to be rotated and scaled on a scanline-by-scanline basis to create many different effects. The most famous of these effects is the application of a perspective effect on a background layer by scaling and rotating the background layer in this manner.</description>
     </item>
     
     <item>
       <title>The Unbearable Lightness of Using `const`</title>
-      <link>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</link>
+      <link>https://ada-lovecraft.github.io/post/the-unbearable-lightness-of-using-const/</link>
       <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</guid>
+      <guid>https://ada-lovecraft.github.io/post/the-unbearable-lightness-of-using-const/</guid>
       <description>It has recently come to my attention that there is some confusion in the javascript community as to the usage of const. If you&amp;rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&amp;rsquo;ll attempt to explain how const operates at the lowest-level possible. But know now, If you&amp;rsquo;re looking for a simple answer regarding when to use const, well, buddy, this isn&amp;rsquo;t the article for you.</description>
     </item>
     
     <item>
       <title>hello, world!</title>
-      <link>https://8-uh.github.io/post/hello-world/</link>
+      <link>https://ada-lovecraft.github.io/post/hello-world/</link>
       <pubDate>Tue, 25 Apr 2017 23:48:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/hello-world/</guid>
+      <guid>https://ada-lovecraft.github.io/post/hello-world/</guid>
       <description>I&amp;rsquo;m back!
 And just trying to get my code highlighting done properly&amp;hellip;
 import remark from &#39;remark&#39; import html from &#39;remark-html&#39; import visit from &#39;unist-util-visit&#39; import u from &#39;unist-builder&#39; import jetpack from &#39;fs-jetpack&#39; import debug from &#39;debug&#39; import fmt from &#39;fmt-obj&#39; import {truncValues, none} from &#39;./utils&#39; import reporter from &#39;vfile-reporter&#39; import CodeStore from &#39;./CodeStore&#39; import LoveNotes from &#39;./LoveNotes&#39; const fs = jetpack const log = debug(&#39;love-notes:log&#39;) const err = debug(&#39;love-notes:err&#39;) function process(fptr) { log(&#39;fptr:&#39;, fptr) const contents = fs.</description>

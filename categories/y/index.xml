@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Y on love-notes</title>
-    <link>https://8-uh.github.io/categories/y/</link>
+    <link>https://ada-lovecraft.github.io/categories/y/</link>
     <description>Recent content in Y on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 12 Jul 2017 03:18:11 -0500</lastBuildDate>
     
-	<atom:link href="https://8-uh.github.io/categories/y/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ada-lovecraft.github.io/categories/y/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>But I Don&#39;t Wanna: Part 2 [WIP]</title>
-      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</link>
+      <link>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-2/</link>
       <pubDate>Wed, 12 Jul 2017 03:18:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</guid>
+      <guid>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-2/</guid>
       <description>Part Two: Mmmm&amp;hellip; Delicious Jumping right in from where we left off from Part One, we&amp;rsquo;re gonna dive straight into:
 Classes &amp;ldquo;Why start there?&amp;rdquo;, you might be asking. The truth is, proper use of classes in es6 will allow us to slowly step into new concepts using a familiar framework. Here&amp;hellip; lemme show you:
 A Classic Example of a JavaScript class

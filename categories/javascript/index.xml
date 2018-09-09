@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Javascript on love-notes</title>
-    <link>https://8-uh.github.io/categories/javascript/</link>
+    <link>https://ada-lovecraft.github.io/categories/javascript/</link>
     <description>Recent content in Javascript on love-notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 13 Jul 2017 15:44:11 -0500</lastBuildDate>
     
-	<atom:link href="https://8-uh.github.io/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ada-lovecraft.github.io/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>But I Don&#39;t Wanna: Part 2</title>
-      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</link>
+      <link>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-2/</link>
       <pubDate>Thu, 13 Jul 2017 15:44:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-2/</guid>
+      <guid>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-2/</guid>
       <description>Part Two: wtf is =&amp;gt; all about?&amp;rsquo; Let me introduce you to the arrow operator. You&amp;rsquo;ve probably seen this little guy hanging around code you&amp;rsquo;ve seen online and thought to yourself:
 I can assure you, without a doubt, that the arrow operator is not your nemesis. In fact, I&amp;rsquo;m willing to bet she&amp;rsquo;s about to become your best friend. =&amp;gt; is, in my opinion, the single most important addition to javascript in ES6.</description>
     </item>
     
     <item>
       <title>But I Don&#39;t Wanna: Part 1</title>
-      <link>https://8-uh.github.io/post/but-i-dont-wanna-part-1/</link>
+      <link>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-1/</link>
       <pubDate>Tue, 11 Jul 2017 13:55:11 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/but-i-dont-wanna-part-1/</guid>
+      <guid>https://ada-lovecraft.github.io/post/but-i-dont-wanna-part-1/</guid>
       <description>Part One: Getting Started First Things First: Everything&amp;rsquo;s Gonna Be Just Fine Hey, remember when ES6 first started coming on the scene and you were like:
 It started gaining traction, new libraries were being written in it, yet still you were like:
 Then friends, family, co-workers, and YouTube subscribers all started using it, and yet&amp;hellip;
@@ -36,10 +36,10 @@ It&amp;rsquo;s ok, little bird. I&amp;rsquo;m gonna tell you a secret:
     
     <item>
       <title>The Unbearable Lightness of Using `const`</title>
-      <link>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</link>
+      <link>https://ada-lovecraft.github.io/post/the-unbearable-lightness-of-using-const/</link>
       <pubDate>Tue, 02 May 2017 02:43:06 -0500</pubDate>
       
-      <guid>https://8-uh.github.io/post/the-unbearable-lightness-of-using-const/</guid>
+      <guid>https://ada-lovecraft.github.io/post/the-unbearable-lightness-of-using-const/</guid>
       <description>It has recently come to my attention that there is some confusion in the javascript community as to the usage of const. If you&amp;rsquo;ll allow me a few minutes and artistic license to butcher the -actual- underpinnings of memory management and registration in the V8 engine, I&amp;rsquo;ll attempt to explain how const operates at the lowest-level possible. But know now, If you&amp;rsquo;re looking for a simple answer regarding when to use const, well, buddy, this isn&amp;rsquo;t the article for you.</description>
     </item>
     
